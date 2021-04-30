@@ -1,0 +1,81 @@
+version: '3.9'
+services:
+  postgres:
+    command: postgres -N 500
+    environment:
+      POSTGRES_DB: shapeless
+      POSTGRES_PASSWORD: shapeless
+      POSTGRES_USER: shapeless
+    image: postgres:13.2                                    # https://hub.docker.com/_/postgres/tags
+    ports:
+      - "31800:5432"
+  prometheus:
+    image: prom/prometheus:v2.26.0                          # https://hub.docker.com/r/prom/prometheus/tags
+    ports:
+      - "31900:9090"
+    volumes:
+      - "./prometheus:/etc/prometheus"
+  zookeeper:
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVERS: zookeeper:22888:23888
+    image: confluentinc/cp-zookeeper:5.5.4                  # https://hub.docker.com/_/zookeeper/tags
+    ports:
+      - "2181:2181"
+    volumes:
+      - ~/.shapeless_runtime/zookeeper/data:/data
+      - ~/.shapeless_runtime/zookeeper/datalog:/datalog
+  kafka:
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-localhost}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+    image: confluentinc/cp-kafka:5.5.4                      # https://hub.docker.com/r/confluentinc/cp-kafka/tags
+    ports:
+      - "9092:9092"
+    volumes:
+      - ~/.shapeless_runtime/kafka/data:/var/lib/kafka/data
+  dispatcher:
+    depends_on:
+      - postgres
+      - prometheus
+      - zookeeper
+      - kafka
+    environment:
+      SHP_DISPATCHER_POSTGRES_HOST: postgres
+      SHP_DISPATCHER_POSTGRES_PORT: 5432
+      SHP_DISPATCHER_POSTGRES_DATABASE_NAME_FILE: /run/secrets/shp_dispatcher_postgres_database_name
+      SHP_DISPATCHER_POSTGRES_USERNAME_FILE: /run/secrets/shp_dispatcher_postgres_username
+      SHP_DISPATCHER_POSTGRES_PASSWORD_FILE: /run/secrets/shp_dispatcher_postgres_password
+      SHP_DISPATCHER_POSTGRES_SCHEMA_FILE: /run/secrets/shp_dispatcher_postgres_schema
+      SHP_FB_CLIENT_ID_FILE: /run/secrets/shp_fb_client_id
+      SHP_FB_CLIENT_SECRET_FILE: /run/secrets/shp_fb_client_secret
+    image: shapeless/dispatcher
+    ports:
+      - "31500:31500"
+    secrets:
+      - shp_fb_client_id
+      - shp_fb_client_secret
+      - shp_dispatcher_postgres_database_name
+      - shp_dispatcher_postgres_username
+      - shp_dispatcher_postgres_password
+      - shp_dispatcher_postgres_schema
+secrets:
+  shp_fb_client_id:
+    file: ~/.shapeless_runtime/.secrets/shp_fb_client_id
+  shp_fb_client_secret:
+    file: ~/.shapeless_runtime/.secrets/shp_fb_client_secret
+  shp_dispatcher_postgres_database_name:
+    file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_database_name
+  shp_dispatcher_postgres_username:
+    file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_username
+  shp_dispatcher_postgres_password:
+    file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_password
+  shp_dispatcher_postgres_schema:
+    file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_schema

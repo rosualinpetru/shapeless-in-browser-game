@@ -1,0 +1,3 @@
+https://www.udemy.com/course/android-oreo-kotlin-app-masterclass
+https://www.udemy.com/course/kotlin-for-java-developer
+https://www.udemy.com/course/apache-kafka

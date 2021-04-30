@@ -1,0 +1,25 @@
+[versions]
+
+kotlinVersion = "1.4.31"
+
+springBootVersion = "2.4.4"                          #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot
+springBootStarterWebVersion = "2.4.4"                #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+springBootStarterDataJpaVersion = "2.4.4"            #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+springBootStarterSecurityVersion = "2.4.4"           #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+springBootStarterOAuth2Version = "2.4.4"             #https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+springDependencyManagementVersion = "1.0.11.RELEASE" #https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
+postgresVersion = "42.2.19"                          #https://mvnrepository.com/artifact/org.postgresql/postgresql
+jacksonVersion = "2.12.2"                            #https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+
+[libraries]
+
+spring-boot-core = { module = "org.springframework.boot:spring-boot", version.ref = "springBootVersion" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBootStarterWebVersion" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springBootStarterSecurityVersion" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBootStarterDataJpaVersion" }
+spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client", version.ref = "springBootStarterOAuth2Version" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlinVersion" }
+jackson = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
+postgres = { module = "org.postgresql:postgresql", version.ref = "postgresVersion" }
+
