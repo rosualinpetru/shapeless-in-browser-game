@@ -221,3 +221,4 @@ lint/tmp/
 .DS_Store
 .generated
 .secrets
+.env

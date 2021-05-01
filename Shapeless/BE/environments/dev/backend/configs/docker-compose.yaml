@@ -56,21 +56,31 @@ services:
       SHP_DISPATCHER_POSTGRES_SCHEMA_FILE: /run/secrets/shp_dispatcher_postgres_schema
       SHP_FB_CLIENT_ID_FILE: /run/secrets/shp_fb_client_id
       SHP_FB_CLIENT_SECRET_FILE: /run/secrets/shp_fb_client_secret
+      SHP_GOOGLE_CLIENT_ID_FILE: /run/secrets/shp_google_client_id
+      SHP_GOOGLE_CLIENT_SECRET_FILE: /run/secrets/shp_google_client_secret
+      SHP_AUTH_TOKEN_SECRET_FILE: /run/secrets/shp_auth_token_secret
     image: shapeless/dispatcher
     ports:
       - "31500:31500"
     secrets:
       - shp_fb_client_id
       - shp_fb_client_secret
+      - shp_google_client_id
+      - shp_google_client_secret
       - shp_dispatcher_postgres_database_name
       - shp_dispatcher_postgres_username
       - shp_dispatcher_postgres_password
       - shp_dispatcher_postgres_schema
+      - shp_auth_token_secret
 secrets:
   shp_fb_client_id:
     file: ~/.shapeless_runtime/.secrets/shp_fb_client_id
   shp_fb_client_secret:
     file: ~/.shapeless_runtime/.secrets/shp_fb_client_secret
+  shp_google_client_id:
+    file: ~/.shapeless_runtime/.secrets/shp_google_client_id
+  shp_google_client_secret:
+    file: ~/.shapeless_runtime/.secrets/shp_google_client_secret
   shp_dispatcher_postgres_database_name:
     file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_database_name
   shp_dispatcher_postgres_username:
@@ -79,3 +89,5 @@ secrets:
     file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_password
   shp_dispatcher_postgres_schema:
     file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_schema
+  shp_auth_token_secret:
+    file: ~/.shapeless_runtime/.secrets/shp_auth_token_secret
