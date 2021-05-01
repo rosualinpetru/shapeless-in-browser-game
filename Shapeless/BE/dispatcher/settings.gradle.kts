@@ -30,17 +30,9 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from(files("../libs.web.toml"))
+            from(files("../libs.dispatcher.toml"))
         }
     }
 }
 
 rootProject.name = "dispatcher"
-
-include("app")
-include("controller")
-include("dto")
-include("model")
-include("dao")
-include("security")
-include("service")

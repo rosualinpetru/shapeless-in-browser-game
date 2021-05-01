@@ -1,0 +1,53 @@
+server:
+  port: ${SHP_DISPATCHER_API_PORT:31500}
+spring:
+  datasource:
+    password: ${SHP_DISPATCHER_POSTGRES_PASSWORD:shapeless}
+    url: jdbc:postgresql://${SHP_DISPATCHER_POSTGRES_HOST:localhost}:${SHP_DISPATCHER_POSTGRES_PORT:5432}/${SHP_DISPATCHER_POSTGRES_DATABASE_NAME:shapeless}
+    username: ${SHP_DISPATCHER_POSTGRES_USERNAME:shapeless}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: ${SHP_DISPATCHER_POSTGRES_SCHEMA:shapeless}
+      javax:
+        persistence:
+          create-database-schemas: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${SHP_GOOGLE_CLIENT_ID}
+            clientSecret: ${SHP_GOOGLE_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: ${SHP_FB_CLIENT_ID}
+            clientSecret: ${SHP_FB_CLIENT_SECRET}
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+          provider:
+            facebook:
+              authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+              tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+              userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+app:
+  auth:
+    tokenSecret: ${SHP_AUTH_TOKEN_SECRET}
+    tokenExpirationMilliseconds: 864000000
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:${SHP_DISPATCHER_API_PORT:31500}/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+

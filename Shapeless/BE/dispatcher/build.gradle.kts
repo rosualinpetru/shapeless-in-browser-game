@@ -1,30 +1,39 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.31"
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    id("org.jetbrains.kotlin.plugin.noarg")
+    kotlin("jvm")
+    kotlin("plugin.spring")
 }
 
-subprojects {
-    group = "com.pad.dispatcher"
-    version = "0.0.1"
+group = "com.pad.dispatcher"
+version = "0.0.1"
 
-    apply(plugin = "java")
+java.sourceCompatibility = JavaVersion.VERSION_11
 
-    java.sourceCompatibility = JavaVersion.VERSION_11
-
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "11"
-        }
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
     }
 }
 
-fun cleanTasks(): List<String> {
-    return subprojects.mapNotNull {
-        it.tasks.findByPath("clean")?.path
-    }
+dependencies {
+    implementation(libs.jjwt)
+    implementation(libs.jackson)
+    implementation(libs.postgres)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.oauth2.client)
 }
 
-tasks.getByPath("clean").dependsOn(cleanTasks())
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    this.archiveFileName.set("dispatcher.${archiveExtension.get()}")
+}
 
