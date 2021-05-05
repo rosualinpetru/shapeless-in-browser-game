@@ -7,6 +7,7 @@ import com.pad.shapeless.dispatcher.dto.SignUpRequest
 import com.pad.shapeless.dispatcher.service.AuthService
 import com.pad.shapeless.dispatcher.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,16 +25,23 @@ class AuthController @Autowired constructor(
 
     @PostMapping("/login")
     fun authenticateUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<*> =
-        ResponseEntity.ok<Any>(AuthResponse(authService.authUserToken(loginRequest)))
+        try {
+            ResponseEntity.status(HttpStatus.OK).body(AuthResponse(authService.authUserToken(loginRequest)))
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e)
+        }
+
 
     @PostMapping("/signup")
-    fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> {
+    fun registerUser(@Valid @RequestBody signUpRequest: SignUpRequest): ResponseEntity<*> = try {
         val user = userService.registerUser(signUpRequest)
         val location = ServletUriComponentsBuilder
             .fromCurrentContextPath().path("/user/me")
             .buildAndExpand(user.id).toUri()
-        return ResponseEntity.created(location)
+        ResponseEntity.created(location)
             .body<Any>(ApiResponse(true, "User registered successfully!"))
+    } catch (e: Exception) {
+        ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e)
     }
 
 }

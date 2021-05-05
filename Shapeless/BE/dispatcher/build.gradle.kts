@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
-    id("org.jetbrains.kotlin.plugin.noarg")
+    id("org.jetbrains.kotlin.plugin.jpa")
     kotlin("jvm")
     kotlin("plugin.spring")
 }
@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.postgres)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlin.noarg)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.security)

@@ -1,5 +1,5 @@
 package com.pad.shapeless.dispatcher.exception
 
-import javax.naming.AuthenticationException
+import org.springframework.security.core.AuthenticationException
 
 class OAuth2AuthenticationProcessingException(msg: String) : AuthenticationException(msg)

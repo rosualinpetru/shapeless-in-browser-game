@@ -1,24 +1,83 @@
-import React from "react"
-import logo from './logo.svg';
-import './App.css';
-import background from "./bkg.png";
+import { useState, useEffect, useContext } from "react";
+import { Route, Switch } from "react-router-dom";
+import { ToastContainer, Slide } from "react-toastify";
 
+import PrivateRoute from "./components/private-route/PrivateRoute";
+import AppHeader from "./components/app-header/AppHeader";
+import LoadingIndicator from "./components/loading/LoadingIndicator";
+import OAuth2RedirectHandler from "./components/oauth2/OAuth2RedirectHandler";
 
-import Facebook from './components/Facebook';
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import Signup from "./pages/signup/Signup";
+import Profile from "./pages/profile/Profile";
+import NotFound from "./pages/NotFound";
+
+import { getCurrentUser } from "./api/APIUtils";
+import AuthenticationContext from "./context/authentication";
+
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const authContext = useContext(AuthenticationContext);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getCurrentUser()
+      .then((response) => {
+        authContext.setUserHandler(response);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        authContext.deleteUserHandler();
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
   return (
-    <div className="App" style={{ backgroundImage: `url(${background})` }}>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-           <h2>Shapeless's Facebook Login</h2>
-        </p>
-        <p>
-          To get started, authenticate with Facebook.
-        </p>
-        <Facebook />
-      </header>
+    <div className="app">
+      <div className="app-top-box">
+        <AppHeader />
+      </div>
+      <div className="app-body">
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <PrivateRoute path="/profile">
+            <Profile />
+          </PrivateRoute>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/signup">
+            <Signup />
+          </Route>
+          <Route path="/oauth2/redirect">
+            <OAuth2RedirectHandler />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </div>
+      <ToastContainer
+        position="bottom-right"
+        transition={Slide}
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
     </div>
   );
 }

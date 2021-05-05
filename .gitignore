@@ -222,3 +222,5 @@ lint/tmp/
 .generated
 .secrets
 .env
+
+*.p12

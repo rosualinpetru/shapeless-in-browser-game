@@ -16,8 +16,7 @@ pluginManagement {
     plugins {
         id("org.springframework.boot") version springBootVersion
         id("io.spring.dependency-management") version springDependencyManagementVersion
-        id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-
+        id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.spring") version kotlinVersion
     }
