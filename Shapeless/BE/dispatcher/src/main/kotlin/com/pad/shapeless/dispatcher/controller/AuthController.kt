@@ -1,9 +1,6 @@
 package com.pad.shapeless.dispatcher.controller
 
-import com.pad.shapeless.dispatcher.dto.ApiResponse
-import com.pad.shapeless.dispatcher.dto.AuthResponse
-import com.pad.shapeless.dispatcher.dto.LoginRequest
-import com.pad.shapeless.dispatcher.dto.SignUpRequest
+import com.pad.shapeless.dispatcher.dto.*
 import com.pad.shapeless.dispatcher.service.AuthService
 import com.pad.shapeless.dispatcher.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,8 +16,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/auth")
 class AuthController @Autowired constructor(
-    val authService: AuthService,
-    val userService: UserService,
+    private val authService: AuthService,
+    private val userService: UserService,
 ) {
 
     @PostMapping("/login")

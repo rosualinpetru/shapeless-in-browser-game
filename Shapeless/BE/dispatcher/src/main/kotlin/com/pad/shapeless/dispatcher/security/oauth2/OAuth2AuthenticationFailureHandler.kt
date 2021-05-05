@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class OAuth2AuthenticationFailureHandler @Autowired constructor(
-    val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository
+    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository
 ) : SimpleUrlAuthenticationFailureHandler() {
 
     override fun onAuthenticationFailure(
