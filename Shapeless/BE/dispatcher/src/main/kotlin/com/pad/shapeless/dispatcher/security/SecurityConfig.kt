@@ -23,12 +23,12 @@ import org.springframework.security.core.userdetails.UserDetailsService as Sprin
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 class SecurityConfig @Autowired constructor(
-    val shpUserDetailsService: ShpUserDetailsService,
-    val shpOAuth2UserService: ShpOAuth2UserService,
-    val passwordEncoder: PasswordEncoder,
-    val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
-    val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
-    val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
+    private val shpUserDetailsService: ShpUserDetailsService,
+    private val shpOAuth2UserService: ShpOAuth2UserService,
+    private val passwordEncoder: PasswordEncoder,
+    private val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
+    private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
+    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) : WebSecurityConfigurerAdapter() {
     @Bean
     fun tokenAuthenticationFilter(): TokenAuthenticationFilter = TokenAuthenticationFilter()

@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class OAuth2AuthenticationSuccessHandler @Autowired constructor(
-    val tokenProvider: TokenProvider,
-    val appProperties: AppProperties,
-    val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository
+    private val tokenProvider: TokenProvider,
+    private val appProperties: AppProperties,
+    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     override fun onAuthenticationSuccess(

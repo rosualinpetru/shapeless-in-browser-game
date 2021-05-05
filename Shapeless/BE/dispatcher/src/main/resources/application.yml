@@ -1,12 +1,5 @@
 server:
   port: ${SHP_DISPATCHER_API_PORT:31500}
-  ssl:
-    key-alias: shapeless
-    key-store: classpath:shapeless.p12
-    key-store-password: ${SHP_DISPATCHER_HTTPS_KEYSTORE_PASSWORD}
-    key-store-type: PKCS12
-security:
-  require-ssl: true
 spring:
   datasource:
     password: ${SHP_DISPATCHER_POSTGRES_PASSWORD:shapeless}

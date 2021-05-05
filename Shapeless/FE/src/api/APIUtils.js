@@ -51,3 +51,11 @@ export function signup(signupRequest) {
     body: JSON.stringify(signupRequest),
   });
 }
+
+export function updateImage(updateImageRequest) {
+  return request({
+    url: API_BASE_URL + "/users/update/imageUrl",
+    method: "POST",
+    body: JSON.stringify(updateImageRequest),
+  });
+}
