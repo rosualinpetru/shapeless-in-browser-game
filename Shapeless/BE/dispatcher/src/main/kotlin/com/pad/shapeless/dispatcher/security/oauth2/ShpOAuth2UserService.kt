@@ -43,8 +43,8 @@ class ShpOAuth2UserService @Autowired constructor(val userService: UserService) 
         val user = userService.getUserByEmail(email)?.let {
             if (it.authProvider != oAuth2UserInfo.authProvider) {
                 throw OAuth2AuthenticationProcessingException(
-                    """Looks like you're signed up with $it account. 
-                    |Please use your ${it.authProvider} account to login.
+                    """Looks like you're signed up with a ${it.authProvider.name.toLowerCase().capitalize()} account. 
+                    |Please use your ${it.authProvider.name.toLowerCase().capitalize()} account to login.
                 """.trimMargin()
                 )
             }

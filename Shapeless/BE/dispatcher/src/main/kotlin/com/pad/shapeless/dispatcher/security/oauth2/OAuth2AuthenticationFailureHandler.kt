@@ -5,6 +5,8 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -23,9 +25,9 @@ class OAuth2AuthenticationFailureHandler @Autowired constructor(
             CookieUtils.getCookie(
                 request,
                 HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME
-            )?.value ?: "/"
+            )?.value ?: ("/")
         )
-            .queryParam("error", exception.localizedMessage)
+            .queryParam("error", URLEncoder.encode(exception.message, StandardCharsets.UTF_8))
             .build().toUriString()
 
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response)
