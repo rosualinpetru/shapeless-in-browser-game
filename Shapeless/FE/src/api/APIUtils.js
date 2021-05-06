@@ -60,9 +60,24 @@ export function updateImage(updateImageRequest) {
   });
 }
 
-export function leaderboard(leaderboardRequest) {
+export function leaderboard() {
   return request({
-    url: API_BASE_URL + "/api/leaderboard/users",
+    url: API_BASE_URL + "/api/users",
     method: "GET",
+  });
+}
+
+export function rooms() {
+  return request({
+    url: API_BASE_URL + "/api/rooms",
+    method: "GET",
+  });
+}
+
+export function createRoom(createRoomRequest) {
+  return request({
+    url: API_BASE_URL + "/api/rooms",
+    method: "POST",
+    body: JSON.stringify(createRoomRequest),
   });
 }
