@@ -6,6 +6,7 @@ spring:
     url: jdbc:postgresql://${SHP_DISPATCHER_POSTGRES_HOST:localhost}:${SHP_DISPATCHER_POSTGRES_PORT:5432}/${SHP_DISPATCHER_POSTGRES_DATABASE_NAME:shapeless}
     username: ${SHP_DISPATCHER_POSTGRES_USERNAME:shapeless}
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:

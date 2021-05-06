@@ -21,7 +21,6 @@ class UserController @Autowired constructor(
     private val userService: UserService
 ) {
     @GetMapping("/users/current")
-    @PreAuthorize("hasRole('USER')")
     fun getCurrentUser(@CurrentUser userPrincipal: UserPrincipal): User =
         userService.getUserById(userPrincipal.getId()) ?: throw ResourceNotFoundException(
             "User",
