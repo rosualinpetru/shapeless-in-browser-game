@@ -32,6 +32,12 @@ function AppHeader() {
                   <NavLink to="/profile">Profile</NavLink>
                 </li>
                 <li>
+                  <NavLink to="/rooms">Rooms</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/leaderboard">Leaderboard</NavLink>
+                </li>
+                <li>
                   <a onClick={logOut}>Logout</a>
                 </li>
               </ul>
