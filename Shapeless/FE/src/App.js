@@ -11,6 +11,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
+import Leaderboard from "./pages/leaderboard/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 import { getCurrentUser } from "./api/APIUtils";
@@ -20,10 +21,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const authContext = useContext(AuthenticationContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     getCurrentUser()
       .then((response) => {
         authContext.setUserHandler(response);
@@ -51,6 +51,9 @@ function App() {
           </Route>
           <PrivateRoute path="/profile">
             <Profile />
+          </PrivateRoute>
+          <PrivateRoute path="/leaderboard">
+            <Leaderboard />
           </PrivateRoute>
           <Route path="/login">
             <Login />

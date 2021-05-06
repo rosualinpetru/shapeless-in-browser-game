@@ -29,10 +29,7 @@ function Login(props) {
       }, 100);
     }
     if (authContext.isAuthenticated) {
-      history.push({
-        pathname: "/profile",
-        state: { from: location },
-      });
+      history.goBack();
     }
   }, []);
 

@@ -1,6 +1,6 @@
 import { useRef, useContext, useEffect } from "react";
 
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL } from "../../constants";
 import { signup } from "../../api/APIUtils";
 import { toast } from "react-toastify";
@@ -12,16 +12,12 @@ import googleLogo from "../../images/google-logo.png";
 import "./Signup.css";
 
 function Signup(props) {
-  let location = useLocation();
   let history = useHistory();
   const authContext = useContext(AuthenticationContext);
 
   useEffect(() => {
     if (authContext.isAuthenticated) {
-      history.push({
-        pathname: "/profile",
-        state: { from: location },
-      });
+      history.goBack();
     }
   }, []);
 

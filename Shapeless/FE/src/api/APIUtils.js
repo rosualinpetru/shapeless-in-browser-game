@@ -59,3 +59,10 @@ export function updateImage(updateImageRequest) {
     body: JSON.stringify(updateImageRequest),
   });
 }
+
+export function leaderboard(leaderboardRequest) {
+  return request({
+    url: API_BASE_URL + "/api/leaderboard/users",
+    method: "GET",
+  });
+}

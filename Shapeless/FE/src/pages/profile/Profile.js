@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 function Profile(props) {
   const authContext = useContext(AuthenticationContext);
   const [imageUrl, setImageUrl] = useState("");
-
   function inputChangeHandler(event) {
     setImageUrl(event.target.value);
   }
@@ -22,6 +21,8 @@ function Profile(props) {
     updateImage(updateImageRequest).then((response) =>
       toast.success(response.message)
     );
+
+    event.target.reset();
   }
 
   return (
@@ -47,35 +48,35 @@ function Profile(props) {
           </div>
           <div className="profile-name">
             <h2>{authContext.currentUser.name}</h2>
-            <p className="profile-email">
+            <p className="profile-score">
               <b>Score: </b>
               {authContext.currentUser.score}
             </p>
             <br />
-            <div className="update-form">
-              <hr />
-              <form onSubmit={submitHandler}>
-                <div className="form-item">
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    className="form-control"
-                    placeholder="Image Url"
-                    onChange={inputChangeHandler}
-                    required
-                  />
-                </div>
-                <div className="form-item">
-                  <button
-                    type="submit"
-                    className="btn btn-block btn-primary"
-                    disabled={imageUrl === ""}
-                  >
-                    Update Image
-                  </button>
-                </div>
-              </form>
-            </div>
+          </div>
+          <div className="update-form">
+            <hr />
+            <form onSubmit={submitHandler}>
+              <div className="form-item">
+                <input
+                  type="text"
+                  name="imageUrl"
+                  className="form-control"
+                  placeholder="Image Url"
+                  onChange={inputChangeHandler}
+                  required
+                />
+              </div>
+              <div className="form-item">
+                <button
+                  type="submit"
+                  className="btn btn-block btn-primary"
+                  disabled={imageUrl === ""}
+                >
+                  Update Image
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
