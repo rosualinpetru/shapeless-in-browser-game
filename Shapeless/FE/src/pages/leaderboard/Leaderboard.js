@@ -11,9 +11,6 @@ function Leaderboard(props) {
 
   useEffect(() => {
     leaderboardRequest()
-      .then((response) => {
-        return response.json();
-      })
       .then((data) => {
         setLeaderboard(data);
         setIsLoading(false);

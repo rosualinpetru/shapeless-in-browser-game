@@ -15,9 +15,6 @@ function Rooms() {
 
   useEffect(() => {
     roomsRequest()
-      .then((response) => {
-        return response.json();
-      })
       .then((data) => {
         setRooms(data);
         setIsLoading(false);
