@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { leaderboard as leaderboardRequest } from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 
@@ -9,10 +10,15 @@ function Leaderboard(props) {
   const [leaderboard, setLeaderboard] = useState([]);
 
   useEffect(() => {
-    leaderboardRequest().then((data) => {
-      setLeaderboard(data);
-      setIsLoading(false);
-    });
+    leaderboardRequest()
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setLeaderboard(data);
+        setIsLoading(false);
+      })
+      .catch(() => toast.error("There is an error loading the leaderboard!"));
   }, []);
 
   if (isLoading) {

@@ -70,7 +70,7 @@ function Profile(props) {
               <div className="form-item">
                 <button
                   type="submit"
-                  className="btn btn-block btn-primary"
+                  className="btn btn-primary"
                   disabled={imageUrl === ""}
                 >
                   Update Image

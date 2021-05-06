@@ -12,6 +12,8 @@ import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
 import Leaderboard from "./pages/leaderboard/Leaderboard";
+import CreateRoom from "./pages/create-room/CreateRoom";
+import Rooms from "./pages/rooms/Rooms";
 import NotFound from "./pages/NotFound";
 
 import { getCurrentUser } from "./api/APIUtils";
@@ -53,6 +55,15 @@ function App() {
             <Profile />
           </PrivateRoute>
           <PrivateRoute path="/leaderboard">
+            <Leaderboard />
+          </PrivateRoute>
+          <PrivateRoute path="/rooms">
+            <Rooms />
+          </PrivateRoute>
+          <PrivateRoute path="/create-room">
+            <CreateRoom />
+          </PrivateRoute>
+          <PrivateRoute path="/rooms">
             <Leaderboard />
           </PrivateRoute>
           <Route path="/login">
