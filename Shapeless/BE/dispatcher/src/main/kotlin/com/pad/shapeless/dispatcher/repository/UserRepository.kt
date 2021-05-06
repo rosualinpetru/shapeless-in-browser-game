@@ -7,4 +7,5 @@ import java.util.*
 interface UserRepository : CrudRepository<User, UUID> {
     fun findByEmail(email: String): User?
     fun existsByEmail(email: String): Boolean
+    override fun findAll(): List<User>
 }

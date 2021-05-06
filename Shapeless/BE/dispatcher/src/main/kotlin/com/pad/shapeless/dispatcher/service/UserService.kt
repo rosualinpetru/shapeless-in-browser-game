@@ -1,6 +1,7 @@
 package com.pad.shapeless.dispatcher.service
 
 import com.pad.shapeless.dispatcher.dto.ImageUpdateRequest
+import com.pad.shapeless.dispatcher.dto.LeaderboardEntry
 import com.pad.shapeless.dispatcher.dto.SignUpRequest
 import com.pad.shapeless.dispatcher.exception.BadRequestException
 import com.pad.shapeless.dispatcher.model.AuthProvider
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+
 
 @Service
 class UserService @Autowired constructor(
@@ -71,4 +73,18 @@ class UserService @Autowired constructor(
                 email = existingUser.email
             )
         )
+
+    @Transactional
+    fun getAllLeaderboardEntries(): List<LeaderboardEntry> =
+        userRepository.findAll()
+            .sortedBy { it.score }
+            .mapIndexed { index, user ->
+                LeaderboardEntry(
+                    position = index,
+                    name = user.name,
+                    score = user.score,
+                    imageURL = user.imageUrl
+                )
+            }
+
 }
