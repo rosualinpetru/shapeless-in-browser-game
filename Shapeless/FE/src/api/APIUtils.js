@@ -31,7 +31,7 @@ export function getCurrentUser() {
   }
 
   return request({
-    url: API_BASE_URL + "/user/me",
+    url: API_BASE_URL + "/users/current",
     method: "GET",
   });
 }
@@ -54,7 +54,7 @@ export function signup(signupRequest) {
 
 export function updateImage(updateImageRequest) {
   return request({
-    url: API_BASE_URL + "/users/update/imageUrl",
+    url: API_BASE_URL + "/api/users/update/imageUrl",
     method: "POST",
     body: JSON.stringify(updateImageRequest),
   });
@@ -62,7 +62,7 @@ export function updateImage(updateImageRequest) {
 
 export function leaderboard() {
   return request({
-    url: API_BASE_URL + "/api/users",
+    url: API_BASE_URL + "/api/users/leaderboard",
     method: "GET",
   });
 }
