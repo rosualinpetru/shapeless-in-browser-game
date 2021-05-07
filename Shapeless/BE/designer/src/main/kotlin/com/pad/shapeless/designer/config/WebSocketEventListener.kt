@@ -2,7 +2,6 @@ package com.pad.shapeless.designer.config
 
 import com.pad.shapeless.designer.model.MessageType
 import com.pad.shapeless.designer.model.RoomMessage
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.event.EventListener
 import org.springframework.messaging.simp.SimpMessageSendingOperations
@@ -20,13 +19,15 @@ class WebSocketEventListener @Autowired constructor(private val messagingTemplat
 
     }
 
+
     @EventListener
     fun handleWebSocketDisconnectListener(event: SessionDisconnectEvent) {
         val headerAccessor = StompHeaderAccessor.wrap(event.message)
-        val user = headerAccessor.sessionAttributes!!["user"] as UUID
-        val roomId = headerAccessor.sessionAttributes!!["room_id"] as UUID
-        val roomMessage = RoomMessage(MessageType.LEAVE, user)
-        messagingTemplate.convertAndSend("/topic/$roomId", roomMessage)
+        val userId = headerAccessor.sessionAttributes?.get("user") as UUID?
+        val roomId = headerAccessor.sessionAttributes?.get("room_id") as UUID?
+        if(userId != null && roomId != null) {
+            val roomMessage = RoomMessage(MessageType.LEAVE, userId)
+            messagingTemplate.convertAndSend("/topic/$roomId", roomMessage)
+        }
     }
-
 }

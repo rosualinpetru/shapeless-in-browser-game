@@ -1,6 +1,7 @@
 package com.pad.shapeless.dispatcher.service
 
 import com.pad.shapeless.dispatcher.dto.ImageUpdateRequest
+import com.pad.shapeless.dispatcher.dto.IsPlayingQuery
 import com.pad.shapeless.dispatcher.dto.LeaderboardEntry
 import com.pad.shapeless.dispatcher.dto.SignUpRequest
 import com.pad.shapeless.dispatcher.exception.BadRequestException
@@ -32,6 +33,10 @@ class UserService @Autowired constructor(
     @Transactional
     fun updateImageUrl(user: User, imageUpdateRequest: ImageUpdateRequest): User? =
         userRepository.save(user.copy(imageUrl = imageUpdateRequest.imageUrl))
+
+    @Transactional
+    fun updateIsPlaying(user: User, isPlayingQuery: IsPlayingQuery): User? =
+        userRepository.save(user.copy(isPlaying = isPlayingQuery.isPlaying))
 
     @Transactional
     fun registerUser(signUpRequest: SignUpRequest): User =

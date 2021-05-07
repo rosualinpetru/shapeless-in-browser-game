@@ -25,7 +25,6 @@ dependencies {
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.websocket)
-    implementation(libs.spring.boot.starter.security)
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

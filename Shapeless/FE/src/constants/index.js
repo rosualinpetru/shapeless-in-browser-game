@@ -10,3 +10,8 @@ export const FACEBOOK_AUTH_URL =
   API_BASE_URL +
   "/oauth2/authorize/facebook?redirect_uri=" +
   OAUTH2_REDIRECT_URI;
+
+export const messageType = {
+  join: "JOIN",
+  leave: "LEAVE",
+};
