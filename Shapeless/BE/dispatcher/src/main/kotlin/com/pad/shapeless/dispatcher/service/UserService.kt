@@ -80,7 +80,7 @@ class UserService @Autowired constructor(
             .sortedBy { it.score }
             .mapIndexed { index, user ->
                 LeaderboardEntry(
-                    position = index,
+                    position = index + 1,
                     name = user.name,
                     score = user.score,
                     imageURL = user.imageUrl

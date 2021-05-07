@@ -68,10 +68,13 @@ export function leaderboard() {
 }
 
 export function rooms() {
-  return request({
+  /*return request({
     url: API_BASE_URL + "/api/rooms",
     method: "GET",
-  });
+  });*/
+  return Promise.resolve([
+    { id: 1, name: "room1", difficulty: "easy", owner: "o1" },
+  ]);
 }
 
 export function createRoom(createRoomRequest) {

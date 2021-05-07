@@ -26,9 +26,6 @@ data class User(
     @JsonIgnore
     val salt: String? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "users_room_FK")
-    val joinedRoom: Room? = null,
 
     val score: Int = 0,
 

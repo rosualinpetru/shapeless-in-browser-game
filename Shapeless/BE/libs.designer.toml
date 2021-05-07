@@ -1,0 +1,16 @@
+[versions]
+
+kotlinVersion = "1.5.0"
+springBootStarterWebVersion = "2.4.5"                #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+springDependencyManagementVersion = "1.0.11.RELEASE" #https://mvnrepository.com/artifact/io.spring.dependency-management/io.spring.dependency-management.gradle.plugin
+jacksonVersion = "2.12.2"                            #https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+springBootStarterSecurityVersion = "2.4.5"           #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+springBootStarterWebSocketVersion = "2.4.5"          #https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
+[libraries]
+
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBootStarterWebVersion" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlinVersion" }
+jackson = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonVersion" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springBootStarterSecurityVersion" }
+spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "springBootStarterWebSocketVersion" }
