@@ -1,20 +1,17 @@
 import { useContext } from "react";
-import { Route, useHistory, useLocation } from "react-router-dom";
+import { Route, useLocation, Redirect } from "react-router-dom";
 import AuthenticationContext from "../../context/authentication";
 
 function PrivateRoute(props) {
-  const history = useHistory();
-  const location = useLocation();
   const authContext = useContext(AuthenticationContext);
   return (
-    <Route path={props.path}>
-      {authContext.isAuthenticated
-        ? props.children
-        : history.push({
-            pathname: "/login",
-            state: { from: location },
-          })}
-    </Route>
+    <div>
+      {authContext.isAuthenticated ? (
+        <Route path={props.path}>{props.children}</Route>
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </div>
   );
 }
 

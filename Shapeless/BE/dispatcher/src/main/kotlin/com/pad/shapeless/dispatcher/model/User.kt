@@ -26,6 +26,8 @@ data class User(
     @JsonIgnore
     val salt: String? = null,
 
+    @JsonIgnore
+    val isPlaying: Boolean = false,
 
     val score: Int = 0,
 

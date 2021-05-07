@@ -51,7 +51,7 @@ function SocialSignup() {
   );
 }
 
-function SignupForm(props) {
+function SignupForm() {
   let history = useHistory();
 
   const nameRef = useRef();

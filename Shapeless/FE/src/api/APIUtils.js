@@ -54,7 +54,7 @@ export function signup(signupRequest) {
 
 export function updateImage(updateImageRequest) {
   return request({
-    url: API_BASE_URL + "/api/users/update/imageUrl",
+    url: API_BASE_URL + "/api/users/imageUrl",
     method: "POST",
     body: JSON.stringify(updateImageRequest),
   });
@@ -73,8 +73,20 @@ export function rooms() {
     method: "GET",
   });*/
   return Promise.resolve([
-    { id: 1, name: "room1", difficulty: "easy", owner: "o1" },
+    {
+      id: "c795daf5-12e1-4d6f-90d3-05332a442319",
+      name: "room1",
+      difficulty: "easy",
+      owner: "o1",
+    },
   ]);
+}
+
+export function amIPlaying() {
+  return request({
+    url: API_BASE_URL + "/api/users/isPlaying",
+    method: "GET",
+  });
 }
 
 export function createRoom(createRoomRequest) {
