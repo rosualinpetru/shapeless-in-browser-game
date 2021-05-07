@@ -16,9 +16,5 @@ data class Room (
     @JoinColumn(name = "rooms_user_fk")
     val owner: User,
 
-){
-    @JsonIgnore
-    @OneToMany(mappedBy = "joinedRoom", cascade = [CascadeType.ALL], orphanRemoval = true)
-    private val players: Set<User> = setOf()
-}
+)
 

@@ -5,7 +5,7 @@ import { rooms as roomsRequest } from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import "./Rooms.css";
 
-function joinRoom() {}
+
 
 function Rooms() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +28,10 @@ function Rooms() {
 
   function refreshRooms() {
     setRefresh((old) => !old);
+  }
+
+  function joinRoom(id) {
+    history.push(`/room/${id}`);
   }
 
   if (isLoading) {
@@ -65,7 +69,7 @@ function Rooms() {
               </thead>
               <tbody>
                 {rooms.map((entry) => (
-                  <Entry data={entry} key={entry.id} />
+                  <Entry data={entry} key={entry.id} joinRoom={() => joinRoom(entry.id)} />
                 ))}
               </tbody>
             </table>
@@ -77,6 +81,7 @@ function Rooms() {
 }
 
 function Entry(props) {
+  
   return (
     <tr>
       <td>{props.data.difficulty}</td>
@@ -87,7 +92,7 @@ function Entry(props) {
         <h3>{props.data.owner}</h3>
       </td>
       <td>
-        <button className="btn btn-primary btn-sm" onClick={joinRoom}>
+        <button className="btn btn-primary btn-sm" onClick={props.joinRoom}>
           Join
         </button>
       </td>

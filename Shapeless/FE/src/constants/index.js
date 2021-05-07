@@ -1,4 +1,5 @@
 export const API_BASE_URL = "http://localhost:31500";
+export const WS_BASE_URL = "http://localhost:31600";
 export const ACCESS_TOKEN = "accessToken";
 
 export const OAUTH2_REDIRECT_URI = "http://localhost:31700/oauth2/redirect";

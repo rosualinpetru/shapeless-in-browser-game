@@ -7,7 +7,7 @@ function PrivateRoute(props) {
   const location = useLocation();
   const authContext = useContext(AuthenticationContext);
   return (
-    <Route>
+    <Route path={props.path}>
       {authContext.isAuthenticated
         ? props.children
         : history.push({
