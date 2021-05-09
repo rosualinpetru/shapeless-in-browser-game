@@ -8,6 +8,7 @@
 
 .leaderboard-box {
   margin: auto;
+  border-radius: 10px;
   border: 1px solid black;
   width: 50%;
 }
@@ -172,4 +173,13 @@
   line-height: 40px;
   color: #fff;
   font-size: 1.5em;
+}
+
+.leaderboardHeader {
+  margin-left:420px;
+  width:30%;
+  border-radius: 10px;
+  border: 2px solid #000000;
+  background-color: rgba(255,255,255,0.1);
+  font-family:fantasy;
 }

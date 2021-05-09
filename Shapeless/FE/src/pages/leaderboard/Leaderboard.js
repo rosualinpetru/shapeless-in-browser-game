@@ -27,7 +27,7 @@ function Leaderboard(props) {
       <div className="container">
         <div className="leaderboard-wrapper">
           <div className="leaderboard-header">
-            <h2>Leaderboard</h2>
+            <h2 className="leaderboardHeader">Leaderboard</h2>
           </div>
           <div className="leaderboard-box scrollbar">
             <table className="fl-table">

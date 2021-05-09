@@ -8,12 +8,19 @@
 
 .profile-info .profile-avatar img {
   border-radius: 50%;
-  max-width: 250px;
+  max-width: 220px;
 }
 
 .profile-info .profile-name {
+  border: 2px solid white;
+  border-radius: 15px;
+  background-color:rgba(255, 255, 255, 0.2);
+  width: 25%;
+  height: 120px;
+  margin-left:460px;
+  font-family:fantasy;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .profile-info .profile-score {
