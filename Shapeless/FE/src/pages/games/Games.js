@@ -59,18 +59,18 @@ function Games() {
         <div className="games-wrapper">
           <div className="games-header">
             <button
-              className="btn btn-success btn-sm btn-create"
+              className="btn btn-primary btn-create"
               onClick={createRoom}
             >
               +
             </button>
             <button
-              className="btn btn-secondary btn-sm btn-refresh"
-              onClick={refreshGames}
+              className="btn btn-primary btn-refresh"
+              onClick={refreshRooms}
             >
               ⟳
             </button>
-            <h2>Games</h2>
+            <h2 className="roomsHeader" >Rooms</h2>
           </div>
           <div className="games-box scrollbar">
             <table className="fl-table">
@@ -110,7 +110,7 @@ function Entry(props) {
         <h3>{props.data.ownerName}</h3>
       </td>
       <td>
-        <button className="btn btn-primary btn-sm" onClick={props.joinRoom}>
+        <button className="btn btn-primary btn-join" onClick={props.joinRoom}>
           Join
         </button>
       </td>

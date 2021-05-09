@@ -1,13 +1,19 @@
 .app-header {
+  margin-left: 5px;
+  margin-right: 5px;
   height: 60px;
   position: relative;
   z-index: 10;
+  border-radius: 20px;
+  border: 3px solid #ffffff;
+  background-color: rgba(255,255,255,0.3);
 }
 
 .app-title {
-  line-height: 60px;
+  font-family: fantasy;
+  line-height: 50px;
   vertical-align: middle;
-  font-size: 1.35em;
+  font-size: 2.35em;
 }
 
 .app-branding {
@@ -25,6 +31,9 @@
 }
 
 .app-nav ul li {
+  font-family: fantasy;
+  vertical-align: middle;
+  font-size: 1.35em;
   list-style-type: none;
   display: inline-block;
 }

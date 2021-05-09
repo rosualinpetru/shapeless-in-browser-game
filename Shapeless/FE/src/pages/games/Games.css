@@ -9,6 +9,7 @@
 .games-box {
   margin: auto;
   border: 1px solid black;
+  border-radius: 10px;
   width: 50%;
 }
 
@@ -27,15 +28,28 @@
 
 .btn-create {
   float: left;
-  border-radius: 100% !important;
+  font-size:30px !important;
+  border:1.5px solid black !important;
+  border-radius: 15px !important;
 }
 
 .btn-refresh {
   float: right;
-  border-radius: 100% !important;
+  font-size:25px !important;
+  border:1.5px solid black !important;
+  border-radius: 15px !important;
+}
+
+.btn-join {
+  float: right;
+  font-size:15px !important;
+  font-family: fantasy;
+  border:1.5px solid black !important;
+  border-radius: 15px !important;
 }
 
 .scrollbar {
+  background-color: rgba(255,255,255,0.1);
   height: 500px;
   overflow-y: scroll;
 }
@@ -49,7 +63,7 @@
   width: 100%;
   max-width: 100%;
   white-space: nowrap;
-  background-color: white;
+  background-color: rgba(255,255,255,0.7);
 }
 
 .fl-table td,
@@ -63,6 +77,7 @@
 }
 
 .fl-table thead th {
+  font-size:fantasy;
   color: #ffffff;
   background: #324960;
 }
@@ -137,4 +152,13 @@
     display: block;
     text-align: center;
   }
+}
+
+.roomsHeader {
+  margin-left:200px;
+  width:30%;
+  border-radius: 10px;
+  border: 2px solid #000000;
+  background-color: rgba(255,255,255,0.1);
+  font-family:fantasy;
 }

@@ -7,10 +7,14 @@ import { AuthenticationContextProvider } from "./context/authentication";
 import "./index.css";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <AuthenticationContextProvider>
-      <App />
-    </AuthenticationContextProvider>
-  </BrowserRouter>,
+  <div className="background">
+    <div className="blur">
+      <BrowserRouter>
+        <AuthenticationContextProvider>
+          <App />
+        </AuthenticationContextProvider>
+      </BrowserRouter>
+    </div>
+  </div>,
   document.getElementById("root")
 );
