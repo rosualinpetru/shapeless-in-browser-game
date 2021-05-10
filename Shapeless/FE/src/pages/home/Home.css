@@ -12,7 +12,6 @@
   font-weight: 400;
   color: black;
   margin-top: 50px;
-  margin-left:180px;
 }
 
 .graf-bg-container {
@@ -25,7 +24,6 @@
 
 .graf-layout {
   height: 100%;
-  margin-left: 220px;
   position: relative;
   perspective: 2000px;
 }

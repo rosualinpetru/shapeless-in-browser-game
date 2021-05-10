@@ -242,8 +242,9 @@ fieldset[disabled] .form-control {
 
 .background {
   background-image: url('images/back.png');
+  position: absolute;
   background-position: bottom;
-  background-repeat: no-repeat;
+  background-attachment: fixed;
   background-size: cover;
   height: 578px;
   width: 100%;
