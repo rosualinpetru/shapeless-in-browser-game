@@ -2,10 +2,8 @@ package com.pad.shapeless.dispatcher.controller
 
 import com.pad.shapeless.dispatcher.dto.ApiResponse
 import com.pad.shapeless.dispatcher.dto.ImageUpdateRequest
-import com.pad.shapeless.dispatcher.dto.IsPlayingQuery
-import com.pad.shapeless.dispatcher.dto.LeaderboardEntry
+import com.pad.shapeless.dispatcher.dto.IsPlayingDto
 import com.pad.shapeless.dispatcher.exception.ResourceNotFoundException
-import com.pad.shapeless.dispatcher.model.User
 import com.pad.shapeless.dispatcher.security.CurrentUser
 import com.pad.shapeless.dispatcher.security.UserPrincipal
 import com.pad.shapeless.dispatcher.service.UserService
@@ -22,12 +20,14 @@ class UserController @Autowired constructor(
     private val userService: UserService
 ) {
     @GetMapping("/users/current")
-    fun getCurrentUser(@CurrentUser userPrincipal: UserPrincipal): ResponseEntity<*>  =
-        ResponseEntity.status(HttpStatus.OK).body<Any>(userService.getUserById(userPrincipal.getId()) ?: throw ResourceNotFoundException(
-            "User",
-            "id",
-            userPrincipal.getId()
-        ))
+    fun getCurrentUser(@CurrentUser userPrincipal: UserPrincipal): ResponseEntity<*> =
+        ResponseEntity.status(HttpStatus.OK).body<Any>(
+            userService.getUserById(userPrincipal.getId()) ?: throw ResourceNotFoundException(
+                "User",
+                "id",
+                userPrincipal.getId()
+            )
+        )
 
     @PostMapping("/users/imageUrl")
     @PreAuthorize("hasRole('USER')")
@@ -37,7 +37,7 @@ class UserController @Autowired constructor(
     ): ResponseEntity<*> =
         userService.getUserById(userPrincipal.getId())?.let {
             userService.updateImageUrl(it, imageUpdateRequest)
-            ResponseEntity.status(HttpStatus.OK).body<Any>(ApiResponse(true, "Image updated!"))
+            ResponseEntity.status(HttpStatus.OK).body<Any>(ApiResponse("Image updated!"))
         } ?: throw ResourceNotFoundException(
             "User",
             "id",
@@ -48,32 +48,4 @@ class UserController @Autowired constructor(
     @PreAuthorize("hasRole('USER')")
     fun getUsersLeaderboard(): ResponseEntity<*> =
         ResponseEntity.status(HttpStatus.OK).body<Any>(userService.getAllLeaderboardEntries())
-
-    @PostMapping("/users/isPlaying")
-    @PreAuthorize("hasRole('USER')")
-    fun updateIsPlaying(
-        @CurrentUser userPrincipal: UserPrincipal,
-        @RequestBody isPlayingQuery: IsPlayingQuery
-    ): ResponseEntity<*> =
-        userService.getUserById(userPrincipal.getId())?.let {
-            userService.updateIsPlaying(it, isPlayingQuery)
-            ResponseEntity.status(HttpStatus.OK).body<Any>(ApiResponse(true, "Status updated!"))
-        } ?: throw ResourceNotFoundException(
-            "User",
-            "id",
-            userPrincipal.getId()
-        )
-
-    @GetMapping("/users/isPlaying")
-    @PreAuthorize("hasRole('USER')")
-    fun getIsPlaying(
-        @CurrentUser userPrincipal: UserPrincipal,
-    ): ResponseEntity<*> =
-        userService.getUserById(userPrincipal.getId())?.let {
-            ResponseEntity.status(HttpStatus.OK).body<Any>(IsPlayingQuery(it.isPlaying))
-        } ?: throw ResourceNotFoundException(
-            "User",
-            "id",
-            userPrincipal.getId()
-        )
 }

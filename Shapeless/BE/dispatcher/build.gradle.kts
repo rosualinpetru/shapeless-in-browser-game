@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.spring")
 }
 
-group = "com.pad.dispatcher"
+group = "com.pad.shapeless.dispatcher"
 version = "0.0.1"
 
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -21,17 +21,20 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation(libs.jjwt)
-    implementation(libs.jackson)
-    implementation(libs.postgres)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.kotlin.stdlib.jdk8)
-    implementation(libs.kotlin.noarg)
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.data.jpa)
-    implementation(libs.spring.boot.starter.security)
-    implementation(libs.spring.boot.starter.validation)
-    implementation(libs.spring.boot.starter.oauth2.client)
+    implementation(project(":shared"))
+    implementation(dispatcher.jjwt)
+    implementation(dispatcher.jackson)
+    implementation(dispatcher.postgres)
+    implementation(dispatcher.kotlin.reflect)
+    implementation(dispatcher.kotlin.stdlib.jdk8)
+    implementation(dispatcher.kotlin.noarg)
+    implementation(dispatcher.spring.boot.starter.web)
+    implementation(dispatcher.spring.boot.starter.data.jpa)
+    implementation(dispatcher.spring.boot.starter.security)
+    implementation(dispatcher.spring.boot.starter.validation)
+    implementation(dispatcher.spring.boot.starter.websocket)
+    implementation(dispatcher.spring.boot.starter.oauth2.client)
+    implementation(dispatcher.spring.security.messaging)
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

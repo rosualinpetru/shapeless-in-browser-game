@@ -16,6 +16,6 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:31700").withSockJS()
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS()
     }
 }

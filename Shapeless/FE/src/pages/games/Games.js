@@ -1,37 +1,52 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { toast } from "react-toastify";
-import { rooms as roomsRequest } from "../../api/APIUtils";
+import {
+  games as gamesRequest,
+  amIPlaying,
+  gamesData,
+} from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
-import "./Rooms.css";
+import "./Games.css";
 
-
-
-function Rooms() {
+function Games() {
   const [isLoading, setIsLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
-  const [rooms, setRooms] = useState([]);
+  const [games, setGames] = useState([]);
   let history = useHistory();
+  let location = useLocation();
 
   useEffect(() => {
-    roomsRequest()
+    gamesRequest()
       .then((data) => {
-        setRooms(data);
+        setGames(data);
         setIsLoading(false);
       })
-      .catch(() => toast.error("There is an error with loading the rooms!"));
+      .catch(() => toast.error("There is an error with loading the games!"));
   }, [refresh]);
 
   function createRoom() {
-    history.push("/create-room");
+    history.push("/create-game");
   }
 
-  function refreshRooms() {
+  function refreshGames() {
     setRefresh((old) => !old);
   }
 
-  function joinRoom(id) {
-    history.push(`/room/${id}`);
+  function joinRoom(id, designer) {
+    amIPlaying().then((response) => {
+      if (response.isPlaying) {
+        toast.error("You can play only one game at a time!");
+        return;
+      }
+      history.push({
+        pathname: `/game/${id}`,
+        state: {
+          from: location,
+          designer: designer,
+        },
+      });
+    });
   }
 
   if (isLoading) {
@@ -39,10 +54,10 @@ function Rooms() {
   }
 
   return (
-    <div className="rooms-container">
+    <div className="games-container">
       <div className="container">
-        <div className="rooms-wrapper">
-          <div className="rooms-header">
+        <div className="games-wrapper">
+          <div className="games-header">
             <button
               className="btn btn-success btn-sm btn-create"
               onClick={createRoom}
@@ -51,13 +66,13 @@ function Rooms() {
             </button>
             <button
               className="btn btn-secondary btn-sm btn-refresh"
-              onClick={refreshRooms}
+              onClick={refreshGames}
             >
               ⟳
             </button>
-            <h2>Rooms</h2>
+            <h2>Games</h2>
           </div>
-          <div className="rooms-box scrollbar">
+          <div className="games-box scrollbar">
             <table className="fl-table">
               <thead>
                 <tr>
@@ -68,8 +83,12 @@ function Rooms() {
                 </tr>
               </thead>
               <tbody>
-                {rooms.map((entry) => (
-                  <Entry data={entry} key={entry.id} joinRoom={() => joinRoom(entry.id)} />
+                {games.map((entry) => (
+                  <Entry
+                    data={entry}
+                    key={entry.id}
+                    joinRoom={() => joinRoom(entry.id, entry.designer)}
+                  />
                 ))}
               </tbody>
             </table>
@@ -81,7 +100,6 @@ function Rooms() {
 }
 
 function Entry(props) {
-  
   return (
     <tr>
       <td>{props.data.difficulty}</td>
@@ -89,7 +107,7 @@ function Entry(props) {
         <h3>{props.data.name}</h3>
       </td>
       <td>
-        <h3>{props.data.owner}</h3>
+        <h3>{props.data.ownerName}</h3>
       </td>
       <td>
         <button className="btn btn-primary btn-sm" onClick={props.joinRoom}>
@@ -100,4 +118,4 @@ function Entry(props) {
   );
 }
 
-export default Rooms;
+export default Games;

@@ -1,10 +1,14 @@
 import { ACCESS_TOKEN } from "../../constants";
 import { useHistory, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { toast } from "react-toastify";
+import { getCurrentUser } from "../../api/APIUtils";
+import AuthenticationContext from "../../context/authentication";
 
 function OAuth2RedirectHandler() {
   let history = useHistory();
   let location = useLocation();
+  let authContext = useContext(AuthenticationContext);
 
   function getUrlParameter(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -22,10 +26,18 @@ function OAuth2RedirectHandler() {
   useEffect(() => {
     if (token) {
       localStorage.setItem(ACCESS_TOKEN, token);
-      history.push({
-        pathname: "/profile",
-        state: { from: location },
-      });
+      getCurrentUser()
+        .then((response) => {
+          authContext.setUserHandler(response);
+          toast.success("You're successfully logged in!");
+          history.push({
+            pathname: "/profile",
+            state: { from: location },
+          });
+        })
+        .catch((error) => {
+          toast.error(error.message || "Oops! There was an error with OAuth2!");
+        });
     } else {
       history.push({
         pathname: "/login",
