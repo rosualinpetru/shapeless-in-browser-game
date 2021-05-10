@@ -13,7 +13,7 @@ import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
 import Leaderboard from "./pages/leaderboard/Leaderboard";
 import CreateRoom from "./pages/create-room/CreateRoom";
-import Rooms from "./pages/rooms/Rooms";
+import Rooms from "./pages/games/Games";
 import NotFound from "./pages/NotFound";
 import GameRoom from "./pages/game-room/GameRoom";
 
@@ -58,13 +58,13 @@ function App() {
           <PrivateRoute path="/leaderboard">
             <Leaderboard />
           </PrivateRoute>
-          <PrivateRoute path="/rooms">
+          <PrivateRoute path="/games">
             <Rooms />
           </PrivateRoute>
-          <PrivateRoute path="/create-room">
+          <PrivateRoute path="/create-game">
             <CreateRoom />
           </PrivateRoute>
-          <PrivateRoute path="/room/:roomId">
+          <PrivateRoute path="/game/:gameId">
             <GameRoom />
           </PrivateRoute>
           <Route path="/login">

@@ -8,14 +8,14 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class AuthService @Autowired constructor(
+class UserAuthenticatorService @Autowired constructor(
     private val userRepository: UserRepository,
     private val tokenProvider: TokenProvider,
     private val authenticationManager: AuthenticationManager,
 ) {
-
     fun authUserToken(loginRequest: LoginRequest): String {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(

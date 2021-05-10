@@ -7,7 +7,7 @@ plugins {
     kotlin("plugin.spring")
 }
 
-group = "com.pad.designer"
+group = "com.pad.shapeless.designer"
 version = "0.0.1"
 
 java.sourceCompatibility = JavaVersion.VERSION_11
@@ -20,11 +20,12 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation(libs.jackson)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.kotlin.stdlib.jdk8)
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.websocket)
+    implementation(project(":shared"))
+    implementation(designer.jackson)
+    implementation(designer.kotlin.reflect)
+    implementation(designer.kotlin.stdlib.jdk8)
+    implementation(designer.spring.boot.starter.web)
+    implementation(designer.spring.boot.starter.websocket)
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

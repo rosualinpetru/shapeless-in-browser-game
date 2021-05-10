@@ -1,9 +1,12 @@
-package com.pad.shapeless.dispatcher.security
+package com.pad.shapeless.dispatcher.config
 
+import com.pad.shapeless.dispatcher.security.RestAuthenticationEntryPoint
+import com.pad.shapeless.dispatcher.security.TokenAuthenticationFilter
 import com.pad.shapeless.dispatcher.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository
 import com.pad.shapeless.dispatcher.security.oauth2.OAuth2AuthenticationFailureHandler
 import com.pad.shapeless.dispatcher.security.oauth2.OAuth2AuthenticationSuccessHandler
 import com.pad.shapeless.dispatcher.security.oauth2.ShpOAuth2UserService
+import com.pad.shapeless.dispatcher.service.ShpUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,12 +15,14 @@ import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.core.userdetails.UserDetailsService as SpringUSD
+
 
 @Configuration
 @EnableWebSecurity
@@ -33,11 +38,6 @@ class SecurityConfig @Autowired constructor(
     @Bean
     fun tokenAuthenticationFilter(): TokenAuthenticationFilter = TokenAuthenticationFilter()
 
-    /*
-      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
-      the authorization request. But, since our service is stateless, we can't save it in
-      the session. We'll save the request in a Base64 encoded cookie instead.
-    */
     @Bean
     fun cookieAuthorizationRequestRepository(): HttpCookieOAuth2AuthorizationRequestRepository =
         httpCookieOAuth2AuthorizationRequestRepository
@@ -51,6 +51,10 @@ class SecurityConfig @Autowired constructor(
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     override fun authenticationManagerBean(): AuthenticationManager = super.authenticationManagerBean()
+
+    override fun configure(web: WebSecurity) {
+        web.ignoring().antMatchers("/ws/**")
+    }
 
     @Override
     override fun configure(http: HttpSecurity) {
@@ -80,7 +84,8 @@ class SecurityConfig @Autowired constructor(
                 "/**/*.jpg",
                 "/**/*.html",
                 "/**/*.css",
-                "/**/*.js"
+                "/**/*.js",
+                "/dispatcher/capacity/web"
             )
             .permitAll()
             .antMatchers("/auth/**", "/oauth2/**")

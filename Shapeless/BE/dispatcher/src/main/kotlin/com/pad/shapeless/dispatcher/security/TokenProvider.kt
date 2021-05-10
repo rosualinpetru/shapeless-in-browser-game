@@ -11,7 +11,6 @@ import java.util.*
 @Service
 class TokenProvider(
     private val appProperties: AppProperties,
-    private val logger: Logger = LoggerFactory.getLogger(TokenProvider::class.java)
 ) {
 
     fun createToken(authentication: Authentication): String =
@@ -31,7 +30,6 @@ class TokenProvider(
                 .body.subject
         )
 
-
     fun validateToken(authToken: String): Boolean {
         try {
             Jwts.parser().setSigningKey(appProperties.auth.tokenSecret).parseClaimsJws(authToken)
@@ -48,6 +46,10 @@ class TokenProvider(
             logger.error("JWT claims string is empty.")
         }
         return false
+    }
+
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(TokenProvider::class.java)
     }
 
 }

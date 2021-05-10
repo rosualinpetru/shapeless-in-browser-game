@@ -1,18 +1,18 @@
-.rooms-container {
+.games-container {
   margin-top: 5%;
 }
 
-.rooms-wrapper {
+.games-wrapper {
   margin: auto;
 }
 
-.rooms-box {
+.games-box {
   margin: auto;
   border: 1px solid black;
   width: 50%;
 }
 
-.rooms-header {
+.games-header {
   text-align: center;
   font-weight: 500;
   font-size: 18px;
@@ -20,7 +20,7 @@
   margin: auto;
 }
 
-.rooms-header h1 {
+.games-header h1 {
   margin: 0;
   display: inline-block;
 }

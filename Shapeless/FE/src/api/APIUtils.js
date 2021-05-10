@@ -67,19 +67,18 @@ export function leaderboard() {
   });
 }
 
-export function rooms() {
-  /*return request({
-    url: API_BASE_URL + "/api/rooms",
+export function games() {
+  return request({
+    url: API_BASE_URL + "/api/games",
     method: "GET",
-  });*/
-  return Promise.resolve([
-    {
-      id: "c795daf5-12e1-4d6f-90d3-05332a442319",
-      name: "room1",
-      difficulty: "easy",
-      owner: "o1",
-    },
-  ]);
+  });
+}
+
+export function gamesData(id) {
+  return request({
+    url: `${API_BASE_URL}/api/games/${id}`,
+    method: "GET",
+  });
 }
 
 export function amIPlaying() {
@@ -89,10 +88,10 @@ export function amIPlaying() {
   });
 }
 
-export function createRoom(createRoomRequest) {
+export function createGame(createGameRequest) {
   return request({
-    url: API_BASE_URL + "/api/rooms",
+    url: API_BASE_URL + "/api/games",
     method: "POST",
-    body: JSON.stringify(createRoomRequest),
+    body: JSON.stringify(createGameRequest),
   });
 }

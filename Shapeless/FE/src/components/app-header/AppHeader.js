@@ -32,7 +32,7 @@ function AppHeader() {
                   <NavLink to="/profile">Profile</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/rooms">Rooms</NavLink>
+                  <NavLink to="/games">Rooms</NavLink>
                 </li>
                 <li>
                   <NavLink to="/leaderboard">Leaderboard</NavLink>

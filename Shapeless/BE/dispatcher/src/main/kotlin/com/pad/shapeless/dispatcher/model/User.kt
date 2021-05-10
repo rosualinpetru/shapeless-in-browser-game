@@ -9,7 +9,7 @@ import javax.persistence.*
 @Table(name = "users")
 data class User(
     val name: String,
-    @Column(unique = true)
+
     val email: String,
 
     @JsonIgnore
@@ -26,16 +26,16 @@ data class User(
     @JsonIgnore
     val salt: String? = null,
 
-    @JsonIgnore
-    val isPlaying: Boolean = false,
-
     val score: Int = 0,
 
     @Id
     val id: UUID = UUID.randomUUID()
 ) {
     @JsonIgnore
-    @OneToOne(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
-    private val ownedRoom: Room? = null
+    @OneToOne(mappedBy = "user", orphanRemoval = true)
+    private val player: Player? = null
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "owner", orphanRemoval = true)
+    private val ownedGame: Game? = null
 }

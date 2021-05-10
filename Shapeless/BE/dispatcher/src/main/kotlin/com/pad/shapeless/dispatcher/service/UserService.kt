@@ -1,7 +1,6 @@
 package com.pad.shapeless.dispatcher.service
 
 import com.pad.shapeless.dispatcher.dto.ImageUpdateRequest
-import com.pad.shapeless.dispatcher.dto.IsPlayingQuery
 import com.pad.shapeless.dispatcher.dto.LeaderboardEntry
 import com.pad.shapeless.dispatcher.dto.SignUpRequest
 import com.pad.shapeless.dispatcher.exception.BadRequestException
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 
@@ -24,21 +22,18 @@ class UserService @Autowired constructor(
     private val passwordEncoder: PasswordEncoder,
     private val saltGenerator: SaltGenerator
 ) {
-    @Transactional
+    
     fun getUserById(id: UUID): User? = userRepository.findByIdOrNull(id)
 
-    @Transactional
+    
     fun getUserByEmail(email: String): User? = userRepository.findByEmail(email)
 
-    @Transactional
+    
     fun updateImageUrl(user: User, imageUpdateRequest: ImageUpdateRequest): User? =
         userRepository.save(user.copy(imageUrl = imageUpdateRequest.imageUrl))
 
-    @Transactional
-    fun updateIsPlaying(user: User, isPlayingQuery: IsPlayingQuery): User? =
-        userRepository.save(user.copy(isPlaying = isPlayingQuery.isPlaying))
 
-    @Transactional
+    
     fun registerUser(signUpRequest: SignUpRequest): User =
         if (userRepository.existsByEmail(signUpRequest.email))
             throw BadRequestException("Email address already in use.")
@@ -55,19 +50,21 @@ class UserService @Autowired constructor(
                 }
             )
 
-    @Transactional
+    
     fun registerOAuth2User(oAuth2UserInfo: OAuth2UserInfo): User =
-        userRepository.save(
-            User(
-                name = oAuth2UserInfo.name!!,
-                email = oAuth2UserInfo.email!!,
-                imageUrl = oAuth2UserInfo.imageUrl,
-                authProvider = oAuth2UserInfo.authProvider,
-                providerId = oAuth2UserInfo.id
+        if (userRepository.existsByEmail(oAuth2UserInfo.email!!))
+            throw BadRequestException("Email address already in use.")
+        else
+            userRepository.save(
+                User(
+                    name = oAuth2UserInfo.name!!,
+                    email = oAuth2UserInfo.email!!,
+                    imageUrl = oAuth2UserInfo.imageUrl,
+                    authProvider = oAuth2UserInfo.authProvider,
+                    providerId = oAuth2UserInfo.id
+                )
             )
-        )
-
-    @Transactional
+    
     fun updateOAuth2User(existingUser: User, oAuth2UserInfo: OAuth2UserInfo): User =
         userRepository.save(
             User(
@@ -79,7 +76,7 @@ class UserService @Autowired constructor(
             )
         )
 
-    @Transactional
+    
     fun getAllLeaderboardEntries(): List<LeaderboardEntry> =
         userRepository.findAll()
             .sortedBy { it.score }
@@ -88,7 +85,7 @@ class UserService @Autowired constructor(
                     position = index + 1,
                     name = user.name,
                     score = user.score,
-                    imageURL = user.imageUrl
+                    imageUrl = user.imageUrl
                 )
             }
 

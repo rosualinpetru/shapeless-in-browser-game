@@ -34,7 +34,6 @@ class UserPrincipal private constructor(
 
     override fun getUsername(): String = email
 
-
     override fun isAccountNonExpired(): Boolean = true
 
     override fun isAccountNonLocked(): Boolean = true

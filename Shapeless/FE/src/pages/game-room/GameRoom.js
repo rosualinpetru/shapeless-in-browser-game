@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { WS_BASE_URL, messageType } from "../../constants";
+import { useParams, useHistory, useLocation } from "react-router-dom";
+import { messageType } from "../../constants";
 import AuthenticationContext from "../../context/authentication";
 import SockJsClient from "react-stomp";
 import { amIPlaying } from "../../api/APIUtils";
@@ -8,12 +8,14 @@ import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import { toast } from "react-toastify";
 
 function GameRoom(props) {
-  let { roomId } = useParams();
+  let { gameId } = useParams();
   let [isLoading, setIsLoading] = useState(true);
   let [clientRef, setClientRef] = useState(null);
   let authContext = useContext(AuthenticationContext);
   let currentUser = authContext.currentUser;
   let history = useHistory();
+  let location = useLocation();
+  let designer = location.state.designer;
 
   useEffect(async () => {
     let isPlaying = await amIPlaying()
@@ -37,38 +39,28 @@ function GameRoom(props) {
 
   function onConnect() {
     clientRef.sendMessage(
-      `/app/room/${roomId}/join`,
-      JSON.stringify({
-        type: messageType.join,
-        senderId: currentUser.id,
-        senderData: {
-          name: currentUser.name,
-          imageUrl: currentUser.imageUrl,
-        },
-      })
+      `/app/game/${gameId}/join`,
+      JSON.stringify(currentUser.id)
     );
   }
 
   function onDisconnect() {}
 
   function onMessage(payload) {
-    let message = payload;
-    switch (message.type) {
-      case messageType.join:
-        console.log("join");
-        console.log(message);
+    switch (payload.type) {
+      case messageType.updateLobby:
+        console.log("update_lobby");
         break;
-      case messageType.leave:
-        console.log("leave");
-        console.log(message);
+      case messageType.gameError:
+        console.log("error");
         break;
     }
   }
 
   return (
     <SockJsClient
-      url={`${WS_BASE_URL}/ws`}
-      topics={[`/topic/${roomId}`]}
+      url={`http://${designer}:31600/ws`}
+      topics={[`/topic/${gameId}`]}
       onConnect={onConnect}
       onDisconnect={onDisconnect}
       onMessage={onMessage}

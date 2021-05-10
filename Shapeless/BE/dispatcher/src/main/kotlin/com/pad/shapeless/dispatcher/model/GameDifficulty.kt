@@ -1,6 +1,6 @@
 package com.pad.shapeless.dispatcher.model
 
-enum class Difficulty {
+enum class GameDifficulty {
     EASY,
     MEDIUM,
     HARD

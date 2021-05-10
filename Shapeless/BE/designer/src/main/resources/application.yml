@@ -1,3 +1,12 @@
 server:
   port: ${SHP_DESIGNER_API_PORT:31600}
+app:
+  hosts:
+    dispatcher: ${SHP_DISPATCHER_HOST:localhost:31500}
+logging:
+  level:
+    com:
+      pad:
+        shapeless: DEBUG
+
 

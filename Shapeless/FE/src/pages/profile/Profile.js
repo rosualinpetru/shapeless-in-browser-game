@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 function Profile(props) {
   const authContext = useContext(AuthenticationContext);
   const [imageUrl, setImageUrl] = useState("");
+
   function inputChangeHandler(event) {
     setImageUrl(event.target.value);
   }

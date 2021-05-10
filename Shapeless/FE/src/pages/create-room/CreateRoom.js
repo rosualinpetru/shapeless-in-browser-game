@@ -1,6 +1,7 @@
 import { useRef } from "react";
+import { useHistory, useLocation } from "react-router";
 import { toast } from "react-toastify";
-import { createRoom } from "../../api/APIUtils";
+import { createGame } from "../../api/APIUtils";
 import "./CreateRoom.css";
 
 function CreateRoom() {
@@ -18,21 +19,33 @@ function CreateRoomForm() {
   const nameRef = useRef();
   const difficultyRef = useRef();
   const maxPlayersRef = useRef();
+  const history = useHistory();
+  const location = useLocation();
 
   function submitHandler(event) {
     event.preventDefault();
 
-    const signUpRequest = {
+    const createRoomRequest = {
       name: nameRef.current.value,
       difficulty: difficultyRef.current.value,
       maxPlayers: maxPlayersRef.current.value,
     };
 
-    createRoom(signUpRequest).catch((error) => {
-      toast.error(
-        error.message || "Oops! Something went wrong. Please try again!"
-      );
-    });
+    createGame(createRoomRequest)
+      .then((response) => {
+        history.push({
+          pathname: `/game/${response.gameId}`,
+          state: {
+            from: location,
+            designer: response.location,
+          },
+        });
+      })
+      .catch((error) => {
+        toast.error(
+          error.message || "Oops! Something went wrong. Please try again!"
+        );
+      });
   }
 
   return (

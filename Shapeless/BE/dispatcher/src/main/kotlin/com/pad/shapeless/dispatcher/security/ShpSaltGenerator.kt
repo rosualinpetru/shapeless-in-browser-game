@@ -8,3 +8,7 @@ class ShpSaltGenerator {
     @Bean
     fun saltGenerator(): SaltGenerator = SaltGenerator()
 }
+
+class SaltGenerator {
+    fun generateSalt() = (1..6).map { (('A'..'Z') + ('a'..'z') + ('0'..'9')).random() }.joinToString("")
+}
