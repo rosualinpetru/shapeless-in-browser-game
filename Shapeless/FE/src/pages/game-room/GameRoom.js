@@ -58,16 +58,57 @@ function GameRoom(props) {
   }
 
   return (
-    <SockJsClient
-      url={`http://${designer}:31600/ws`}
-      topics={[`/topic/${gameId}`]}
-      onConnect={onConnect}
-      onDisconnect={onDisconnect}
-      onMessage={onMessage}
-      ref={(client) => {
-        setClientRef(client);
-      }}
-    />
+    <div className="playerlist-container">
+      <SockJsClient
+        url={`http://${designer}:31600/ws`}
+        topics={[`/topic/${gameId}`]}
+        onConnect={onConnect}
+        onDisconnect={onDisconnect}
+        onMessage={onMessage}
+        ref={(client) => {
+          setClientRef(client);
+        }}
+      />
+      <div className="container">
+        <div className="playerlist-wrapper">
+          <div className="playerlist-header">
+            <h2>Room Name</h2>
+            <div className="playerlist-box scrollbar">
+              <table className="fl-table">
+                <tbody>
+                  {playersList.map((entry) => (
+                    <PlayerListEntry data={entry} key={entry.id} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PlayerListEntry(props) {
+  return (
+    <tr>
+      <td>
+        <h3>{props.data.name}</h3>
+      </td>
+      <td>
+        {props.data.imageUrl ? (
+          <img
+            className="img-avatar"
+            src={props.data.imageUrl}
+            alt={props.data.name}
+          />
+        ) : (
+          <div className="text-avatar">
+            <span>{props.data.name && props.data.name[0]}</span>
+          </div>
+        )}
+      </td>
+    </tr>
   );
 }
 export default GameRoom;
