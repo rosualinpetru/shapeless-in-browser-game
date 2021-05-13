@@ -72,4 +72,4 @@ data class LeftErr(
 
 object UpdateLobby : DesignerPayload(MessageType.UPDATE_LOBBY)
 
-data class GameError(val message: String) : DesignerPayload(MessageType.GAME_ERROR)
+data class GameError(val id: UUID, val message: String) : DesignerPayload(MessageType.GAME_ERROR)

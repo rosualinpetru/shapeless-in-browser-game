@@ -46,17 +46,19 @@ class GameService @Autowired constructor(
     }
 
 
-    fun getAllGames(): List<GameDto> =
-        gameRepository.findAll().map {
+    fun getAllGames(): List<GameDto> {
+        gameRepository.findAll()
+            .forEach { if (playerRepository.findAllByGame_Id(it.id).isEmpty()) gameRepository.delete(it) }
+        return gameRepository.findAll().map {
             GameDto(
                 id = it.id,
                 designer = it.designer,
                 difficulty = it.difficulty,
                 maxPlayers = it.maxPlayers,
                 name = it.name,
-                ownerName = it.owner.name
             )
         }
+    }
 
 
     fun getGameById(id: UUID) = gameRepository.findByIdOrNull(id)?.let {
@@ -66,7 +68,6 @@ class GameService @Autowired constructor(
             difficulty = it.difficulty,
             maxPlayers = it.maxPlayers,
             name = it.name,
-            ownerName = it.owner.name
         )
     }
 
@@ -93,7 +94,7 @@ class GameService @Autowired constructor(
 
     fun updateLeftUser(left: Left) =
         gameRepository.findByIdOrNull(left.game)?.let { game ->
-            playerRepository.findByUserId(left.player)?.let { player ->
+            playerRepository.findByUser_Id(left.player)?.let { player ->
                 logger.debug("${player.id} is leaving the ${game.id}")
                 if (game.owner.id == player.user.id) {
                     if (playerRepository.findAll().count { it.game.id == game.id } == 1) {

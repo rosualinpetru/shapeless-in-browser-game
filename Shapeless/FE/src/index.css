@@ -129,6 +129,20 @@ a:hover {
   border-color: #52c41a;
 }
 
+.btn-danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
 .btn-link {
   border: none;
   height: 34px;

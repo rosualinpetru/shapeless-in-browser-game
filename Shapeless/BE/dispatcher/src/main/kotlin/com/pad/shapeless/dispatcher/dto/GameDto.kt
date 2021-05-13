@@ -8,6 +8,5 @@ data class GameDto(
     val name: String,
     val difficulty: GameDifficulty,
     val maxPlayers: Int,
-    val ownerName: String,
     val designer: String
 )

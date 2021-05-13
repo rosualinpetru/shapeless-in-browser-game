@@ -7,5 +7,7 @@ import java.util.*
 
 @Repository
 interface PlayerRepository : CrudRepository<Player, UUID> {
-    fun findByUserId(id: UUID): Player?
+    fun findByUser_Id(id: UUID): Player?
+    fun findAllByGame_Id(id: UUID): List<Player>
+
 }

@@ -74,7 +74,7 @@ export function games() {
   });
 }
 
-export function gamesData(id) {
+export function gameData(id) {
   return request({
     url: `${API_BASE_URL}/api/games/${id}`,
     method: "GET",
@@ -93,5 +93,12 @@ export function createGame(createGameRequest) {
     url: API_BASE_URL + "/api/games",
     method: "POST",
     body: JSON.stringify(createGameRequest),
+  });
+}
+
+export function getPlayersInGame(id) {
+  return request({
+    url: API_BASE_URL + "/api/players/game/" + id,
+    method: "GET",
   });
 }

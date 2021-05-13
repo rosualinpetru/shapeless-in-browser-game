@@ -1,4 +1,4 @@
-import { useRef, useContext, useEffect } from "react";
+import { useRef, useContext, useEffect, useState } from "react";
 
 import { Link, useHistory } from "react-router-dom";
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL } from "../../constants";
@@ -8,6 +8,8 @@ import AuthenticationContext from "../../context/authentication";
 
 import fbLogo from "../../images/fb-logo.png";
 import googleLogo from "../../images/google-logo.png";
+
+import PasswordStrengthBar from "react-password-strength-bar";
 
 import "./Signup.css";
 
@@ -56,7 +58,13 @@ function SignupForm() {
 
   const nameRef = useRef();
   const emailRef = useRef();
-  const passwordRef = useRef();
+  const passwordCheckRef = useRef();
+  const [password, setPassword] = useState("");
+  const passMeter = useRef();
+
+  function isPasswordStrong() {
+    return passMeter.current.state.score > 2;
+  }
 
   function submitHandler(event) {
     event.preventDefault();
@@ -64,21 +72,28 @@ function SignupForm() {
     const signUpRequest = {
       name: nameRef.current.value,
       email: emailRef.current.value,
-      password: passwordRef.current.value,
+      password: password,
     };
-
-    signup(signUpRequest)
-      .then(() => {
-        toast.success(
-          "You're successfully registered. Please login to continue!"
-        );
-        history.push("/login");
-      })
-      .catch((error) => {
-        toast.error(
-          error.message || "Oops! Something went wrong. Please try again!"
-        );
-      });
+    if (password === passwordCheckRef.current.value) {
+      if (isPasswordStrong()) {
+        signup(signUpRequest)
+          .then(() => {
+            toast.success(
+              "You're successfully registered. Please login to continue!"
+            );
+            history.push("/login");
+          })
+          .catch((error) => {
+            toast.error(
+              error.message || "Oops! Something went wrong. Please try again!"
+            );
+          });
+      } else {
+        toast.error("Your password is not strong enough!");
+      }
+    } else {
+      toast.error("Passwords don't match, please try again!");
+    }
   }
 
   return (
@@ -109,7 +124,23 @@ function SignupForm() {
           name="password"
           className="form-control"
           placeholder="Password"
-          ref={passwordRef}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <PasswordStrengthBar
+          minLength="4"
+          ref={passMeter}
+          password={password}
+        />
+      </div>
+      <div className="form-item">
+        <input
+          type="password"
+          name="passwordCheck"
+          className="form-control"
+          placeholder="Enter your password again"
+          ref={passwordCheckRef}
           required
         />
       </div>
