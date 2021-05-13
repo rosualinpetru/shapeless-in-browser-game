@@ -11,10 +11,13 @@ import {
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import { toast } from "react-toastify";
 import "./GameRoom.css";
+import Lobby from "./lobby/Lobby";
+import Game from "./game/Game";
 
 function GameRoom(props) {
   let { gameId } = useParams();
   let [isLoading, setIsLoading] = useState(true);
+  let [isStarted, setIsStarted] = useState(false);
   let [clientRef, setClientRef] = useState(null);
   let [gameData, setGameData] = useState(null);
   let [playersList, setPlayersList] = useState([]);
@@ -53,8 +56,6 @@ function GameRoom(props) {
     );
   }
 
-  function onDisconnect() {}
-
   function onMessage(payload) {
     switch (payload.type) {
       case messageType.updateLobby:
@@ -68,6 +69,9 @@ function GameRoom(props) {
           history.push("/");
         }
         break;
+      case messageType.start:
+        setIsStarted(true);
+        break;
     }
   }
 
@@ -75,63 +79,34 @@ function GameRoom(props) {
     history.push("/");
   }
 
+  function startGame() {
+    clientRef.sendMessage(
+      `/app/game/${gameId}/start`,
+      JSON.stringify(currentUser.id)
+    );
+  }
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
-  function isCurrentUserOwner() {
-    let player = playersList.find((player) => player.id === currentUser.id);
-    if (player !== null) {
-      return player.isOwner;
-    }
-    return false;
-  }
-
   return (
     <div>
-      <div className="playerlist-container">
-        <div className="container">
-          <div className="playerlist-wrapper">
-            <div className="playerlist-header">
-              <button
-                className="btn btn-danger btn-sm btn-leave"
-                onClick={leaveGame}
-              >
-                ⬅
-              </button>
-              <div className="counter-header">
-                {playersList.length}/{gameData.maxPlayers}
-              </div>
-              <h2>{gameData.name}</h2> - <i>{gameData.difficulty}</i>
-            </div>
-            <div className="playerlist-box scrollbar">
-              <table className="fl-table">
-                <tbody>
-                  {playersList.map((entry) => (
-                    <PlayerListEntry data={entry} key={entry.id} />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="playerlist-footer">
-              {playersList.length === gameData.maxPlayers &&
-              isCurrentUserOwner() ? (
-                <button
-                  className="btn btn-success btn-sm btn-start"
-                  onClick={leaveGame}
-                >
-                  Start
-                </button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </div>
+      {isStarted ? (
+        <Game />
+      ) : (
+        <Lobby
+          gameData={gameData}
+          playersList={playersList}
+          leaveGame={leaveGame}
+          startGame={startGame}
+          currentUser={currentUser}
+        />
+      )}
       <SockJsClient
         url={`http://${designer}:31600/ws`}
         topics={[`/topic/${gameId}`]}
         onConnect={onConnect}
-        onDisconnect={onDisconnect}
         onMessage={onMessage}
         ref={(client) => {
           setClientRef(client);
@@ -141,29 +116,4 @@ function GameRoom(props) {
   );
 }
 
-function PlayerListEntry(props) {
-  return (
-    <tr>
-      <td>
-        <h3>
-          {props.data.isOwner ? "👑 " + props.data.name : props.data.name}
-        </h3>
-      </td>
-      <td>
-        {props.data.imageUrl ? (
-          <img
-            className="img-avatar"
-            src={props.data.imageUrl}
-            alt={props.data.name}
-          />
-        ) : (
-          <div className="text-avatar">
-            <span>{props.data.name && props.data.name[0]}</span>
-          </div>
-        )}
-      </td>
-      <td>{props.data.score}</td>
-    </tr>
-  );
-}
 export default GameRoom;

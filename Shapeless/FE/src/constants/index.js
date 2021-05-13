@@ -13,4 +13,11 @@ export const FACEBOOK_AUTH_URL =
 export const messageType = {
   updateLobby: "UPDATE_LOBBY",
   gameError: "GAME_ERROR",
+  start: "START",
+};
+
+export const ShapeColors = {
+  RED: "#d9534f",
+  BLUE: "#0275d8",
+  GREEN: "#5cb85c",
 };

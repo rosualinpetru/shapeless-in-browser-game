@@ -12,7 +12,8 @@ enum class MessageType {
     LEFT_ACK,
     LEFT_ERR,
     UPDATE_LOBBY,
-    GAME_ERROR
+    GAME_ERROR,
+    START
 }
 
 sealed class DesignerPayload(
@@ -71,5 +72,6 @@ data class LeftErr(
     DesignerPayload(MessageType.LEFT_ERR)
 
 object UpdateLobby : DesignerPayload(MessageType.UPDATE_LOBBY)
+object StartGame : DesignerPayload(MessageType.START)
 
 data class GameError(val id: UUID, val message: String) : DesignerPayload(MessageType.GAME_ERROR)
