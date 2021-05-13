@@ -67,7 +67,7 @@ class ClientStompSessionHandler :
                 val joinedErr = jom.readValue(jom.writeValueAsString(payload), JoinedErr::class.java)
                 messagingTemplate.convertAndSend(
                     "/topic/${joinedErr.game}",
-                    GameError(joinedErr.errorMessage)
+                    GameError(joinedErr.player, joinedErr.errorMessage)
                 )
             }
             MessageType.LEFT_ERR -> {
@@ -75,7 +75,7 @@ class ClientStompSessionHandler :
                 val leftErr = jom.readValue(jom.writeValueAsString(payload), LeftErr::class.java)
                 messagingTemplate.convertAndSend(
                     "/topic/${leftErr.game}",
-                    GameError(leftErr.errorMessage)
+                    GameError(leftErr.player, leftErr.errorMessage)
                 )
             }
             else -> println(payload)

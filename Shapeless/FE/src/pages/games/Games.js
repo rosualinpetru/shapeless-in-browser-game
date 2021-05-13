@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router";
 import { toast } from "react-toastify";
-import {
-  games as gamesRequest,
-  amIPlaying,
-  gamesData,
-} from "../../api/APIUtils";
+import { games as gamesRequest, amIPlaying } from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import "./Games.css";
 
