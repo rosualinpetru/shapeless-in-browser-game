@@ -23,7 +23,8 @@ class GameService @Autowired constructor(
     private val designerService: DesignerService,
     private val gameRepository: GameRepository,
     private val userRepository: UserRepository,
-    private val playerRepository: PlayerRepository
+    private val playerRepository: PlayerRepository,
+    private val playerService: PlayerService
 ) {
 
     fun createGame(id: UUID, gameCreationRequest: GameCreationRequest): GameCreationResponse {
@@ -46,16 +47,18 @@ class GameService @Autowired constructor(
     }
 
 
-    fun getAllGames(): List<GameDto> {
+    fun getAllNotStartedGames(): List<GameDto> {
         gameRepository.findAll()
             .forEach { if (playerRepository.findAllByGame_Id(it.id).isEmpty()) gameRepository.delete(it) }
-        return gameRepository.findAll().map {
+        return gameRepository.findAll().filterNot { it.hasStarted }.map {
             GameDto(
                 id = it.id,
                 designer = it.designer,
                 difficulty = it.difficulty,
                 maxPlayers = it.maxPlayers,
                 name = it.name,
+                playersNumber = playerRepository.findAllByGame_Id(it.id).size,
+                ownerName = it.owner.name
             )
         }
     }
@@ -68,6 +71,8 @@ class GameService @Autowired constructor(
             difficulty = it.difficulty,
             maxPlayers = it.maxPlayers,
             name = it.name,
+            playersNumber = playerRepository.findAllByGame_Id(it.id).size,
+            ownerName = it.owner.name
         )
     }
 
@@ -76,7 +81,13 @@ class GameService @Autowired constructor(
         userRepository.findByIdOrNull(joined.player)?.let { user ->
             gameRepository.findByIdOrNull(joined.game)?.let { game ->
                 if (!isPlaying(joined.player))
-                    playerRepository.save(Player(user = user, game = game))
+                    if (playerRepository.findAllByGame_Id(game.id).size < game.maxPlayers)
+                        if (!game.hasStarted)
+                            playerService.joinUser(user, game)
+                        else
+                            throw Exception("The game has already started!")
+                    else
+                        throw Exception("The room is full!")
                 else
                     throw Exception("You can only play one game at a time!")
                 logger.debug("Joined ${user.id} in game ${game.id}")
@@ -116,6 +127,15 @@ class GameService @Autowired constructor(
 
 
     fun isPlaying(id: UUID): Boolean = playerRepository.findAll().any { it.user.id == id }
+    fun updateStartGame(id: UUID) =
+        gameRepository.findByIdOrNull(id)?.let {
+            if (it.maxPlayers == playerRepository.findAllByGame_Id(id).size)
+                gameRepository.save(it.copy(hasStarted = true))
+            else
+                throw Exception("Not enough players!")
+        }
+            ?: throw Exception("Game not found")
+
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(GameService::class.java)

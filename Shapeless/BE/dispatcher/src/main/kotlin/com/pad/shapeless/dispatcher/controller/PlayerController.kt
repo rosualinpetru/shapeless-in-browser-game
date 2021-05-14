@@ -22,4 +22,10 @@ class PlayerController constructor(
     fun getPlayers(@PathVariable id: UUID): ResponseEntity<*> =
         ResponseEntity.status(HttpStatus.OK).body<Any>(playerService.getPlayersInGame(id))
 
+
+    @GetMapping("/players/game/{id}/active")
+    @PreAuthorize("hasRole('USER')")
+    fun getInGamePlayers(@PathVariable id: UUID, @CurrentUser userPrincipal: UserPrincipal): ResponseEntity<*> =
+        ResponseEntity.status(HttpStatus.OK).body<Any>(playerService.getInActualGamePlayers(id, userPrincipal.getId()))
+
 }

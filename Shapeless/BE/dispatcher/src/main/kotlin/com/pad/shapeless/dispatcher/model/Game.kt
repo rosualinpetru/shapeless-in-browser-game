@@ -15,7 +15,8 @@ data class Game(
     @OneToOne
     @JoinColumn(name = "games_user_fk")
     val owner: User,
-    val designer: String
+    val designer: String,
+    val hasStarted: Boolean = false
 ) {
     @JsonIgnore
     @OneToMany(mappedBy = "game", orphanRemoval = true)

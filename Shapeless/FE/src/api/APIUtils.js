@@ -102,3 +102,10 @@ export function getPlayersInGame(id) {
     method: "GET",
   });
 }
+
+export function getPlayersInActualGame(id) {
+  return request({
+    url: API_BASE_URL + "/api/players/game/" + id + "/active",
+    method: "GET",
+  });
+}

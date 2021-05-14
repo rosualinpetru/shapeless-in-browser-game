@@ -39,7 +39,7 @@ class GameController @Autowired constructor(
     @PreAuthorize("hasRole('USER')")
     fun getGames(
         @CurrentUser userPrincipal: UserPrincipal,
-    ): ResponseEntity<*> = ResponseEntity.status(HttpStatus.OK).body<Any>(gameService.getAllGames())
+    ): ResponseEntity<*> = ResponseEntity.status(HttpStatus.OK).body<Any>(gameService.getAllNotStartedGames())
 
     @GetMapping("/games/{id}")
     @PreAuthorize("hasRole('USER')")

@@ -75,6 +75,7 @@ function Games() {
                   <th>Difficulty</th>
                   <th>Room name</th>
                   <th>Owner</th>
+                  <th>Players</th>
                   <th></th>
                 </tr>
               </thead>
@@ -104,6 +105,11 @@ function Entry(props) {
       </td>
       <td>
         <h3>{props.data.ownerName}</h3>
+      </td>
+      <td>
+        <p>
+          {props.data.playersNumber}/{props.data.maxPlayers}
+        </p>
       </td>
       <td>
         <button className="btn btn-primary btn-sm" onClick={props.joinRoom}>
