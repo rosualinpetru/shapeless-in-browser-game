@@ -1,3 +1,5 @@
+import "./Lobby.css";
+
 function Lobby(props) {
   let playersList = props.playersList;
   let gameData = props.gameData;
@@ -37,7 +39,8 @@ function Lobby(props) {
             </table>
           </div>
           <div className="playerlist-footer">
-            {playersList.length === 1 && isCurrentUserOwner() ? (
+            {playersList.length === gameData.maxPlayers &&
+            isCurrentUserOwner() ? (
               <button
                 className="btn btn-success btn-sm btn-start"
                 onClick={props.startGame}

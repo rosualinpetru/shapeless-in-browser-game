@@ -2,16 +2,17 @@ package com.pad.shapeless.designer.config
 
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.pad.shapeless.designer.service.MessagingService
 import com.pad.shapeless.shared.dto.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.lang.Nullable
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.stomp.StompCommand
 import org.springframework.messaging.simp.stomp.StompHeaders
 import org.springframework.messaging.simp.stomp.StompSession
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter
 import org.springframework.stereotype.Component
+import java.io.Serializable
 import java.net.InetAddress
 
 @Component
@@ -19,7 +20,8 @@ class ClientStompSessionHandler :
     StompSessionHandlerAdapter() {
 
     @Autowired
-    private lateinit var messagingTemplate: SimpMessagingTemplate
+    private lateinit var messagingService: MessagingService
+
 
     override fun afterConnected(session: StompSession, connectedHeaders: StompHeaders) {
         session.subscribe("/topic/designer/all", this)
@@ -38,48 +40,17 @@ class ClientStompSessionHandler :
     }
 
     override fun getPayloadType(headers: StompHeaders): Class<Message<*>> {
+
         return Message::class.java
     }
 
-    override fun handleFrame(headers: StompHeaders, message: Any?) {
+    override fun handleFrame(headers: StompHeaders, payload: Any?) {
+        val message = (payload as Message<*>).payload
+        val className = (message as java.util.LinkedHashMap<*, *>)["className"] as String
         val jom = jacksonObjectMapper()
-        val payload = (message as Message<*>).payload
-        val messageTypeRaw = (payload as java.util.LinkedHashMap<*, *>)["type"] as String
-        when (MessageType.valueOf(messageTypeRaw)) {
-            MessageType.JOINED_ACK -> {
-                logger.debug("Received JOINED_ACK!")
-                val joinedAck = jom.readValue(jom.writeValueAsString(payload), JoinedAck::class.java)
-                messagingTemplate.convertAndSend(
-                    "/topic/${joinedAck.game}",
-                    UpdateLobby
-                )
-            }
-            MessageType.LEFT_ACK -> {
-                logger.debug("Received LEFT_ACK!")
-                val leftAck = jom.readValue(jom.writeValueAsString(payload), LeftAck::class.java)
-                messagingTemplate.convertAndSend(
-                    "/topic/${leftAck.game}",
-                    UpdateLobby
-                )
-            }
-            MessageType.JOINED_ERR -> {
-                logger.debug("Received JOINED_ERR!")
-                val joinedErr = jom.readValue(jom.writeValueAsString(payload), JoinedErr::class.java)
-                messagingTemplate.convertAndSend(
-                    "/topic/${joinedErr.game}",
-                    GameError(joinedErr.player, joinedErr.errorMessage)
-                )
-            }
-            MessageType.LEFT_ERR -> {
-                logger.debug("Received LEFT_ERR!")
-                val leftErr = jom.readValue(jom.writeValueAsString(payload), LeftErr::class.java)
-                messagingTemplate.convertAndSend(
-                    "/topic/${leftErr.game}",
-                    GameError(leftErr.player, leftErr.errorMessage)
-                )
-            }
-            else -> println(payload)
-        }
+        val obj = jom.readValue(jom.writeValueAsString(message), Class.forName(className))
+        messagingService.handleMessage(obj as DesignerPayload)
+
     }
 
     override fun handleTransportError(session: StompSession, exception: Throwable) {

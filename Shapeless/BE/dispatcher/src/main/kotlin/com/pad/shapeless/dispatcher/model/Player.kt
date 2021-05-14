@@ -13,6 +13,12 @@ data class Player(
     @JoinColumn(name = "players_game_fk")
     val game: Game,
     val points: Int = 0,
+    @Enumerated(EnumType.STRING)
+    val shape: Shape,
+    @Enumerated(EnumType.STRING)
+    val color: Color,
+    val isShapeKnown: Boolean=false,
+    val isColorKnown: Boolean=false,
     @Id
     val id: UUID = UUID.randomUUID()
 )

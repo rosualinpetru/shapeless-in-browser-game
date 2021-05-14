@@ -34,7 +34,7 @@ class DesignerController @Autowired constructor(
                 gameService.updateJoinedUser(it)
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
-                    Message(JoinedAck(it.player, it.game))
+                    Message(it)
                 )
             } catch (e: Exception) {
                 messagingTemplate.convertAndSend(
@@ -52,12 +52,29 @@ class DesignerController @Autowired constructor(
                 gameService.updateLeftUser(it)
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
-                    Message(LeftAck(it.player, it.game))
+                    Message(it)
                 )
             } catch (e: Exception) {
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
                     Message(LeftErr(it.player, it.game, e.message ?: "Dispatcher internal error!"))
+                )
+            }
+        }
+
+    @MessageMapping("/dispatcher/start")
+    fun gameHasStarted(@Payload message: Message<Start>) =
+        message.payload?.let {
+            try {
+                gameService.updateStartGame(it.game)
+                messagingTemplate.convertAndSend(
+                    "/topic/designer/${message.from.hostAddress}",
+                    Message(it)
+                )
+            } catch (e: Exception) {
+                messagingTemplate.convertAndSend(
+                    "/topic/designer/${message.from.hostAddress}",
+                    Message(StartErr(it.player, it.game, e.message ?: "Dispatcher internal error!"))
                 )
             }
         }

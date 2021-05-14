@@ -1,8 +1,9 @@
 package com.pad.shapeless.designer.controller
 
+import com.pad.shapeless.shared.dto.FrontendAction
 import com.pad.shapeless.shared.dto.Joined
 import com.pad.shapeless.shared.dto.Message
-import com.pad.shapeless.shared.dto.StartGame
+import com.pad.shapeless.shared.dto.Start
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -36,14 +37,14 @@ class GameController @Autowired constructor(
     }
 
     @MessageMapping("/game/{gameId}/start")
-    fun startGmae(
+    fun startGame(
         @DestinationVariable gameId: UUID,
         @Payload message: UUID,
         headerAccessor: SimpMessageHeaderAccessor
     ) {
-        messagingTemplate.convertAndSend(
-            "/topic/${gameId}",
-            StartGame
+        session.send(
+            "/app/dispatcher/start",
+            Message(Start(message,gameId))
         )
     }
 

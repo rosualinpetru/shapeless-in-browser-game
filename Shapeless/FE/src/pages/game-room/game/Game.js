@@ -1,4 +1,6 @@
-function Game() {
+function Game(props) {
+  console.log(props.gameData);
+  console.log(props.playersList);
   return <h1>Started</h1>;
 }
 

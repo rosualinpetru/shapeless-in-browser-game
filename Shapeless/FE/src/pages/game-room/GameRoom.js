@@ -7,6 +7,7 @@ import {
   amIPlaying,
   gameData as gameDataRequest,
   getPlayersInGame,
+  getPlayersInActualGame,
 } from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import { toast } from "react-toastify";
@@ -59,9 +60,15 @@ function GameRoom(props) {
   function onMessage(payload) {
     switch (payload.type) {
       case messageType.updateLobby:
-        getPlayersInGame(gameId).then((response) => {
-          setPlayersList(response);
-        });
+        if (isStarted) {
+          getPlayersInActualGame(gameId).then((response) => {
+            setPlayersList(response);
+          });
+        } else {
+          getPlayersInGame(gameId).then((response) => {
+            setPlayersList(response);
+          });
+        }
         break;
       case messageType.gameError:
         if (payload.id === currentUser.id) {
@@ -70,7 +77,10 @@ function GameRoom(props) {
         }
         break;
       case messageType.start:
-        setIsStarted(true);
+        getPlayersInActualGame(gameId).then((response) => {
+          setPlayersList(response);
+          setIsStarted(true);
+        });
         break;
     }
   }
@@ -93,7 +103,11 @@ function GameRoom(props) {
   return (
     <div>
       {isStarted ? (
-        <Game />
+        <Game
+          gameData={gameData}
+          playersList={playersList}
+          currentUser={currentUser}
+        />
       ) : (
         <Lobby
           gameData={gameData}
