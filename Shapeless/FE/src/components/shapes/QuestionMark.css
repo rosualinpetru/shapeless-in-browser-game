@@ -1,0 +1,44 @@
+.qm {
+  animation-name: spin, depth;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 5s;
+  text-align: center;
+  font-size: calc(1px * var(--qm-size));
+  color: var(--qm-color);
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+
+@keyframes depth {
+  0% {
+    text-shadow: 0 0 var(--qm-color);
+  }
+  25% {
+    text-shadow: calc(0.05px * var(--qm-size)) 0 var(--qm-color),
+      calc(0.1px * var(--qm-size)) 0 var(--qm-color),
+      calc(0.15px * var(--qm-size)) 0 var(--qm-color),
+      calc(0.2px * var(--qm-size)) 0 var(--qm-color),
+      calc(0.25px * var(--qm-size)) 0 var(--qm-color);
+  }
+  50% {
+    text-shadow: 0 0 var(--qm-color);
+  }
+  75% {
+    text-shadow: calc(-0.05px * var(--qm-size)) 0 var(--qm-color),
+      calc(-0.1px * var(--qm-size)) 0 var(--qm-color),
+      calc(-0.15px * var(--qm-size)) 0 var(--qm-color),
+      calc(-0.2px * var(--qm-size)) px 0 var(--qm-color),
+      calc(-0.25px * var(--qm-size)) 0 var(--qm-color);
+  }
+  100% {
+    text-shadow: 0 0 var(--qm-color);
+  }
+}
