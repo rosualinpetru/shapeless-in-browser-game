@@ -55,4 +55,18 @@ class PlayerService @Autowired constructor(private val playerRepository: PlayerR
             )
         }
     }
+
+    fun getActivePlayers(gameId: UUID): List<InGamePlayerDto> {
+        val allInGame = playerRepository.findAllByGame_Id(gameId)
+        val nextSelect = allInGame.minByOrNull { it.countGuess }
+        return allInGame.map {
+            InGamePlayerDto(
+                id = it.user.id,
+                name = it.user.name,
+                color = it.color,
+                shape = it.shape,
+                isChoosing = nextSelect?.user?.id == it.user.id
+            )
+        }
+    }
 }
