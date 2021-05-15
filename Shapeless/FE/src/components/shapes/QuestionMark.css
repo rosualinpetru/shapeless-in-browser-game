@@ -1,5 +1,5 @@
 .qm {
-  animation-name: spin, depth;
+  animation-name: spin-qm, depth-qm;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-duration: 5s;
@@ -8,7 +8,7 @@
   color: var(--qm-color);
 }
 
-@keyframes spin {
+@keyframes spin-qm {
   from {
     transform: rotateY(0deg);
   }
@@ -17,7 +17,7 @@
   }
 }
 
-@keyframes depth {
+@keyframes depth-qm {
   0% {
     text-shadow: 0 0 var(--qm-color);
   }

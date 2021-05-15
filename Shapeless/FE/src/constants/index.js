@@ -20,4 +20,5 @@ export const ShapeColors = {
   RED: "#d9534f",
   BLUE: "#0275d8",
   GREEN: "#5cb85c",
+  GRAY: "#c0c0c0",
 };

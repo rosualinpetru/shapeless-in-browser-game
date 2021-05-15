@@ -103,11 +103,7 @@ function GameRoom(props) {
   return (
     <div>
       {isStarted ? (
-        <Game
-          gameData={gameData}
-          playersList={playersList}
-          currentUser={currentUser}
-        />
+        <Game playersList={playersList} currentUser={currentUser} />
       ) : (
         <Lobby
           gameData={gameData}

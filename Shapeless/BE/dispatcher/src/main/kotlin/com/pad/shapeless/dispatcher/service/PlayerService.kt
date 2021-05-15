@@ -42,13 +42,17 @@ class PlayerService @Autowired constructor(private val playerRepository: PlayerR
 
     }
 
-    fun getInActualGamePlayers(gameId: UUID, myId: UUID) =
-        playerRepository.findAllByGame_Id(gameId).map{
+    fun getInActualGamePlayers(gameId: UUID, myId: UUID): List<InGamePlayerDto> {
+        val allInGame = playerRepository.findAllByGame_Id(gameId)
+        val nextSelect = allInGame.minByOrNull { it.countGuess }
+        return allInGame.map {
             InGamePlayerDto(
                 id = it.user.id,
                 name = it.user.name,
-                color = if(it.isColorKnown || myId==it.user.id) it.color else null,
-                shape = if(it.isColorKnown || myId==it.user.id) it.shape else null
+                color = if (it.isColorKnown || myId == it.user.id) it.color else null,
+                shape = if (it.isColorKnown || myId == it.user.id) it.shape else null,
+                isChoosing = nextSelect?.user?.id == it.user.id
             )
         }
+    }
 }
