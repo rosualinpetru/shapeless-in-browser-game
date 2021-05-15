@@ -11,22 +11,22 @@
   height: 100%;
 
   -webkit-transform-style: preserve-3d;
-  -webkit-animation: spin 10s linear infinite;
+  -webkit-animation: spin-pyramid 10s linear infinite;
   -webkit-transform-origin: calc(0.83px * var(--pyramid-size))
     calc(1px * var(--pyramid-size)) calc(0.83px * var(--pyramid-size));
 
   -moz-transform-style: preserve-3d;
-  -moz-animation: spin 10s linear infinite;
+  -moz-animation: spin-pyramid 10s linear infinite;
   -moz-transform-origin: calc(0.83px * var(--pyramid-size))
     calc(1px * var(--pyramid-size)) calc(0.83px * var(--pyramid-size));
 
   transform-style: preserve-3d;
-  animation: spin 10s linear infinite;
+  animation: spin-pyramid 10s linear infinite;
   transform-origin: calc(0.83px * var(--pyramid-size))
     calc(1px * var(--pyramid-size)) calc(0.83px * var(--pyramid-size));
 }
 
-@-webkit-keyframes spin {
+@-webkit-keyframes spin-pyramid {
   from {
     -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   }
@@ -35,7 +35,7 @@
   }
 }
 
-@-moz-keyframes spin {
+@-moz-keyframes spin-pyramid {
   from {
     -moz-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   }
@@ -44,7 +44,7 @@
   }
 }
 
-@keyframes spin {
+@keyframes spin-pyramid {
   from {
     transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   }

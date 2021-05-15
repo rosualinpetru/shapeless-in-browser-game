@@ -19,6 +19,7 @@ data class Player(
     val color: Color,
     val isShapeKnown: Boolean=false,
     val isColorKnown: Boolean=false,
+    val countGuess: Int = 0,
     @Id
     val id: UUID = UUID.randomUUID()
 )
