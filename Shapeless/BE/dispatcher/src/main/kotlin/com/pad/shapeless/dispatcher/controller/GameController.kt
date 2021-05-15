@@ -1,11 +1,11 @@
 package com.pad.shapeless.dispatcher.controller
 
-import com.pad.shapeless.dispatcher.dto.GameCreationRequest
-import com.pad.shapeless.dispatcher.dto.IsPlayingDto
+import com.pad.shapeless.dispatcher.dto.*
 import com.pad.shapeless.dispatcher.exception.ResourceNotFoundException
 import com.pad.shapeless.dispatcher.security.CurrentUser
 import com.pad.shapeless.dispatcher.security.UserPrincipal
 import com.pad.shapeless.dispatcher.service.GameService
+import com.pad.shapeless.dispatcher.service.PlayerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,6 +18,7 @@ import java.util.*
 @RequestMapping("/api")
 class GameController @Autowired constructor(
     private val gameService: GameService,
+    private val playerService: PlayerService,
 ) {
 
     @PostMapping("/games")
@@ -60,5 +61,21 @@ class GameController @Autowired constructor(
     ): ResponseEntity<*> =
         ResponseEntity.status(HttpStatus.OK)
             .body<Any>(IsPlayingDto(userPrincipal.getId(), gameService.isPlaying(userPrincipal.getId())))
+
+    fun getGuessedPlayer(players: List<InGamePlayerDto>, guessedId: UUID): InGamePlayerDto
+    {
+        for(p in players)
+            if(p.id === guessedId)
+                return p;
+    }
+
+
+    @GetMapping("/games/{id}/guess")
+    @PreAuthorize("hasRole('USER')")
+    fun handleGuess(guess: GuessDto): ResponseEntity<*> =
+        ResponseEntity.status(HttpStatus.OK).body<Any>(getGuessedPlayer(playerService.getActivePlayers(guess.gameId),guess.guessedId))
+
+
+
 
 }
