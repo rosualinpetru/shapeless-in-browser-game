@@ -9,44 +9,9 @@ services:
     image: postgres:13.2                                    # https://hub.docker.com/_/postgres/tags
     ports:
       - "31800:5432"
-  prometheus:
-    image: prom/prometheus:v2.26.0                          # https://hub.docker.com/r/prom/prometheus/tags
-    ports:
-      - "31900:9090"
-    volumes:
-      - "./prometheus:/etc/prometheus"
-  zookeeper:
-    environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_SERVERS: zookeeper:22888:23888
-    image: confluentinc/cp-zookeeper:5.5.4                  # https://hub.docker.com/_/zookeeper/tags
-    ports:
-      - "2181:2181"
-    volumes:
-      - ~/.shapeless_runtime/zookeeper/data:/data
-      - ~/.shapeless_runtime/zookeeper/datalog:/datalog
-  kafka:
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-localhost}:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 1
-      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-    image: confluentinc/cp-kafka:5.5.4                      # https://hub.docker.com/r/confluentinc/cp-kafka/tags
-    ports:
-      - "9092:9092"
-    volumes:
-      - ~/.shapeless_runtime/kafka/data:/var/lib/kafka/data
   dispatcher:
     depends_on:
       - postgres
-      - prometheus
-      - zookeeper
-      - kafka
     environment:
       SHP_DISPATCHER_POSTGRES_HOST: postgres
       SHP_DISPATCHER_POSTGRES_PORT: 5432
@@ -72,6 +37,14 @@ services:
       - shp_dispatcher_postgres_password
       - shp_dispatcher_postgres_schema
       - shp_auth_token_secret
+  designer:
+    depends_on:
+      - dispatcher
+    environment:
+      SHP_DISPATCHER_HOST_ADDR: dispatcher:31500
+    image: shapeless/designer
+    ports:
+      - "31600:31600"
 secrets:
   shp_fb_client_id:
     file: ~/.shapeless_runtime/.secrets/shp_fb_client_id
@@ -91,3 +64,31 @@ secrets:
     file: ~/.shapeless_runtime/.secrets/shp_dispatcher_postgres_schema
   shp_auth_token_secret:
     file: ~/.shapeless_runtime/.secrets/shp_auth_token_secret
+
+#  Keep this as I might need it at work!
+#  zookeeper:
+#    environment:
+#      ZOOKEEPER_SERVER_ID: 1
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_SERVERS: zookeeper:22888:23888
+#    image: confluentinc/cp-zookeeper:5.5.4                  # https://hub.docker.com/_/zookeeper/tags
+#    ports:
+#      - "2181:2181"
+#    volumes:
+#      - ~/.shapeless_runtime/zookeeper/data:/data
+#      - ~/.shapeless_runtime/zookeeper/datalog:/datalog
+#  kafka:
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-localhost}:9092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#    image: confluentinc/cp-kafka:5.5.4                      # https://hub.docker.com/r/confluentinc/cp-kafka/tags
+#    ports:
+#      - "9092:9092"
+#    volumes:
+#      - ~/.shapeless_runtime/kafka/data:/var/lib/kafka/data

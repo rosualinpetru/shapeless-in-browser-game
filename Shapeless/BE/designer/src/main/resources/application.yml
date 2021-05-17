@@ -2,7 +2,7 @@ server:
   port: ${SHP_DESIGNER_API_PORT:31600}
 app:
   hosts:
-    dispatcher: ${SHP_DISPATCHER_HOST:localhost:31500}
+    dispatcher: ${SHP_DISPATCHER_HOST_ADDR:localhost:31500}
 logging:
   level:
     com:

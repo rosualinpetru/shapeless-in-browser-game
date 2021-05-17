@@ -26,21 +26,19 @@ nix-build --out-link "$GENERATED_FE" \
 
 echo "Building frontend image!"
 LOCAL_REACT_APP_API_URL="http://localhost:31500/"
-docker build -f dockerfiles/Frontend -t "$CONTAINER_NAME" --build-arg REACT_APP_API_URL="$LOCAL_REACT_APP_API_URL" "$GENERATED_FE"
+docker build -f dockerfiles/Frontend -t "shapeless/frontend" --build-arg REACT_APP_API_URL="$LOCAL_REACT_APP_API_URL" "$GENERATED_FE"
 
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
   if [ ! "$(docker ps -aq -f name=$CONTAINER_NAME -f status=exited)" ]; then
     echo "Stopping frontend container"
     docker stop "$CONTAINER_NAME"
   fi
-  echo "Starting frontend container"
-  docker start "$CONTAINER_NAME"
-else
-  echo "Creating & starting frontend container"
-  docker run -d \
-    --name "$CONTAINER_NAME" \
-    -p "$EXPOSED_PORT:$INTERNAL_PORT" \
-    "$CONTAINER_NAME"
+  docker rm "$CONTAINER_NAME"
 fi
+echo "Creating & starting frontend container"
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  -p "$EXPOSED_PORT:$INTERNAL_PORT" \
+  "shapeless/frontend"
 
 docker ps

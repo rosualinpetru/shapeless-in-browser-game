@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     mkdir $out/nginx
     shopt -s dotglob
     cp -R ${feRoot}/* $out/app
+    rm -rf $out/app/node_modules
     cp ${nginxConf} $out/nginx/nginx.conf
   '';
 }

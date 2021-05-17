@@ -27,7 +27,7 @@ class OAuth2AuthenticationFailureHandler @Autowired constructor(
                 HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME
             )?.value ?: ("/")
         )
-            .queryParam("error", URLEncoder.encode(exception.message, StandardCharsets.UTF_8))
+            .queryParam("error", URLEncoder.encode(exception.message, "UTF-8"))
             .build().toUriString()
 
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response)

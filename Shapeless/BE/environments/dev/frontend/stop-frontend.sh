@@ -6,3 +6,4 @@ script_dir=${script_dir//\/\./}
 cd "$script_dir"
 
 docker stop "$(docker ps --format "{{.ID}}" --filter "name=shapeless_frontend")"
+docker rm "$(docker ps --format "{{.ID}}" --filter "name=shapeless_frontend")"
