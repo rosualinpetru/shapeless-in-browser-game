@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
+import java.util.*
 
 
 @Controller
@@ -52,13 +53,14 @@ class DesignerController @Autowired constructor(
                 gameService.updateLeftUser(it)
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
-                    Message(it)
+                    Message(Left(it.player, it.game, gameService.hasGameStarted(it.game)))
                 )
             } catch (e: Exception) {
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
                     Message(LeftErr(it.player, it.game, e.message ?: "Dispatcher internal error!"))
                 )
+                throw e
             }
         }
 
@@ -75,6 +77,23 @@ class DesignerController @Autowired constructor(
                 messagingTemplate.convertAndSend(
                     "/topic/designer/${message.from.hostAddress}",
                     Message(StartErr(it.player, it.game, e.message ?: "Dispatcher internal error!"))
+                )
+            }
+        }
+
+    @MessageMapping("/dispatcher/guess")
+    fun guess(@Payload message: Message<Pair<GuessDto, UUID>>) =
+        message.payload?.first?.let {
+            try {
+                gameService.resolveGuess(it, message.payload!!.second)
+                messagingTemplate.convertAndSend(
+                    "/topic/designer/${message.from.hostAddress}",
+                    Message(Guess(it.guesserId, message.payload!!.second))
+                )
+            } catch (e: Exception) {
+                messagingTemplate.convertAndSend(
+                    "/topic/designer/${message.from.hostAddress}",
+                    Message(GuessErr(it.guesserId, message.payload!!.second, e.message ?: "Dispatcher internal error!"))
                 )
             }
         }

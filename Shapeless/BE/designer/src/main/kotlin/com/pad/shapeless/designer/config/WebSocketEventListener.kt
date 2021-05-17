@@ -29,10 +29,12 @@ class WebSocketEventListener @Autowired constructor(
         val userId = headerAccessor.sessionAttributes?.get("user") as UUID?
         val gameId = headerAccessor.sessionAttributes?.get("game_id") as UUID?
         if (userId != null && gameId != null) {
-            session.send(
-                "/app/dispatcher/left",
-                Message(Left(userId, gameId))
-            )
+            synchronized(session) {
+                session.send(
+                    "/app/dispatcher/left",
+                    Message(Left(userId, gameId))
+                )
+            }
         }
     }
 }

@@ -55,7 +55,10 @@ function ShapeCard(props) {
         {renderShape(props.shape, props.color)}
       </div>
       <div className="shape-card-container">
-        <h4>{props.name}</h4>
+        <h4>
+          {props.name}
+          {props.lives !== null ? <i> - {props.lives}</i> : null}
+        </h4>
       </div>
     </div>
   );
