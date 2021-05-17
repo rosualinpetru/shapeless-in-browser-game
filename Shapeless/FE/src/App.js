@@ -88,6 +88,7 @@ function App() {
         hideProgressBar={false}
         newestOnTop
         closeOnClick
+        pauseOnFocusLoss={false}
         rtl={false}
         draggable
         pauseOnHover={false}

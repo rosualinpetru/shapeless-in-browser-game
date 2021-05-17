@@ -140,11 +140,7 @@ class GameService @Autowired constructor(
                 playerRepository.findByUser_Id(left.player)?.let { playerRepository.delete(it) }
 
             }
-        } ?: throw ResourceNotFoundException(
-            "Game",
-            "id",
-            left.game
-        )
+        }
 
 
     fun isPlaying(id: UUID): Boolean = playerRepository.findAll().any { it.user.id == id }

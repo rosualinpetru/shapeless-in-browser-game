@@ -8,12 +8,14 @@ import {
   gameData as gameDataRequest,
   getPlayersInGame,
   getPlayersInActualGame,
+  getCurrentUser,
 } from "../../api/APIUtils";
 import LoadingIndicator from "../../components/loading/LoadingIndicator";
 import { toast } from "react-toastify";
 import "./GameRoom.css";
 import Lobby from "./lobby/Lobby";
 import Game from "./game/Game";
+import Victory from "./victory/Victory";
 
 function GameRoom(props) {
   let { gameId } = useParams();
@@ -22,6 +24,7 @@ function GameRoom(props) {
   let [clientRef, setClientRef] = useState(null);
   let [gameData, setGameData] = useState(null);
   let [playersList, setPlayersList] = useState([]);
+  let [victory, setVictory] = useState(false);
   let authContext = useContext(AuthenticationContext);
   let currentUser = authContext.currentUser;
   let history = useHistory();
@@ -58,6 +61,12 @@ function GameRoom(props) {
     );
   }
 
+  function onDisconnect() {
+    getCurrentUser().then((response) => {
+      authContext.setUserHandler(response);
+    });
+  }
+
   function onMessage(payload) {
     switch (payload.type) {
       case messageType.updateLobby:
@@ -87,14 +96,15 @@ function GameRoom(props) {
         getPlayersInActualGame(gameId).then((response) => {
           if (
             response.find((player) => player.id === currentUser.id) ===
-            undefined
+              undefined &&
+            response.length !== 0
           ) {
             toast("DEFEAT!");
             history.push("/");
           } else {
             if (response.length === 1) {
               toast("VICTORY!");
-              history.push("/");
+              setVictory(true);
             }
             setPlayersList(response);
           }
@@ -125,11 +135,15 @@ function GameRoom(props) {
   return (
     <div>
       {isStarted ? (
-        <Game
-          playersList={playersList}
-          currentUser={currentUser}
-          guess={guess}
-        />
+        victory ? (
+          <Victory />
+        ) : (
+          <Game
+            playersList={playersList}
+            currentUser={currentUser}
+            guess={guess}
+          />
+        )
       ) : (
         <Lobby
           gameData={gameData}
@@ -143,6 +157,7 @@ function GameRoom(props) {
         url={`http://${designer}:31600/ws`}
         topics={[`/topic/${gameId}`]}
         onConnect={onConnect}
+        onDisconnect={onDisconnect}
         onMessage={onMessage}
         ref={(client) => {
           setClientRef(client);
