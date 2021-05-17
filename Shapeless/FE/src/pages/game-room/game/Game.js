@@ -5,10 +5,6 @@ import { useState, useRef, useEffect } from "react";
 function Game(props) {
   const [selected, setSelected] = useState("");
 
-  useEffect(() => {
-    setSelected("");
-  }, [props.playersList]);
-
   function select(id) {
     if (props.currentUser.id !== id) setSelected(id);
   }
@@ -19,6 +15,15 @@ function Game(props) {
     );
     if (p !== undefined) return p.isChoosing;
     else false;
+  }
+
+  if (selected !== "" && selected !== null && selected !== undefined) {
+    let isStillInGame = props.playersList.find(
+      (player) => player.id == selected
+    );
+    if (isStillInGame === undefined) {
+      setSelected("");
+    }
   }
 
   return (
@@ -64,7 +69,7 @@ function Game(props) {
           </tbody>
         </table>
         {amIChoosing() ? (
-          selected !== "" ? (
+          selected !== "" && selected !== undefined && selected !== null ? (
             <div className="guess-container">
               <div className="guess-content">
                 <h1 className="guess-title">Take a Guess</h1>

@@ -36,23 +36,20 @@ class PlayerService @Autowired constructor(
 
     fun joinUser(user: User, game: Game) {
         val generatedNewCombination = generateUnusedCombination(game.id)
-        (playerRepository.findAllByGame_Id(game.id).size + 1).let {
-            playerRepository.save(
-                Player(
-                    user = user,
-                    game = game,
-                    shape = generatedNewCombination.shape,
-                    color = generatedNewCombination.color,
-                    orderNr = it,
-                    lives = when (game.difficulty) {
-                        GameDifficulty.EASY -> 4 + 1 / it
-                        GameDifficulty.MEDIUM -> 3 + 1 / it
-                        GameDifficulty.HARD -> 2 + 1 / it
-                    }
-                )
+        playerRepository.save(
+            Player(
+                user = user,
+                game = game,
+                shape = generatedNewCombination.shape,
+                color = generatedNewCombination.color,
+                orderNr = playerRepository.findAllByGame_Id(game.id).size + 1,
+                lives = when (game.difficulty) {
+                    GameDifficulty.EASY -> 4
+                    GameDifficulty.MEDIUM -> 3
+                    GameDifficulty.HARD -> 2
+                }
             )
-        }
-
+        )
     }
 
     fun getInActualGamePlayers(gameId: UUID, myId: UUID): List<InGamePlayerDto> {

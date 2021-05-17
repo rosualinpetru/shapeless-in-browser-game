@@ -36,6 +36,6 @@ data class User(
     private val player: Player? = null
 
     @JsonIgnore
-    @OneToOne(mappedBy = "owner", orphanRemoval = true)
+    @OneToOne(mappedBy = "owner")
     private val ownedGame: Game? = null
 }
