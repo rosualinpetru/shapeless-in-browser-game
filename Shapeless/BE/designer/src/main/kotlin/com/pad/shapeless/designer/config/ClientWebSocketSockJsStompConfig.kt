@@ -24,9 +24,16 @@ class ClientWebSocketSockJsStompConfig @Autowired constructor(appProperties: App
         webSocketClient: WebSocketClient,
         stompSessionHandler: StompSessionHandler
     ): StompSession {
-        val webSocketStompClient = WebSocketStompClient(webSocketClient)
-        webSocketStompClient.messageConverter = MappingJackson2MessageConverter()
-        return webSocketStompClient.connect(dispatcherUrl, stompSessionHandler).get()
+        while (true) {
+            try {
+                Thread.sleep(10000)
+                val webSocketStompClient = WebSocketStompClient(webSocketClient)
+                webSocketStompClient.messageConverter = MappingJackson2MessageConverter()
+                return webSocketStompClient.connect(dispatcherUrl, stompSessionHandler).get()
+            } catch (e: Exception) {
+                Thread.sleep(3000)
+            }
+        }
     }
 
     @Bean

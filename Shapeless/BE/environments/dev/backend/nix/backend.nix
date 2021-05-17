@@ -11,12 +11,16 @@ stdenv.mkDerivation rec {
   '';
   buildPhase = ''
     cd Shapeless
+    gradle :designer:clean
     gradle :dispatcher:clean
-    gradle :dispatcher:app:bootJar
+    gradle :designer:bootJar
+    gradle :dispatcher:bootJar
   '';
   installPhase = ''
-    mkdir -p $out/dispatcher
+    mkdir -p $out/dispatcher $out/designer
     cp environments/dev/backend/dockerfiles/docker-entrypoint/docker-entrypoint.sh $out/dispatcher/docker-entrypoint.sh
-    cp dispatcher/app/build/libs/dispatcher.jar $out/dispatcher/dispatcher.jar
+    cp environments/dev/backend/dockerfiles/docker-entrypoint/docker-entrypoint.sh $out/designer/docker-entrypoint.sh
+    cp dispatcher/build/libs/dispatcher.jar $out/dispatcher/dispatcher.jar
+    cp designer/build/libs/designer.jar $out/designer/designer.jar
   '';
 }

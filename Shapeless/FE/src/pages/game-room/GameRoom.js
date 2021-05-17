@@ -31,6 +31,7 @@ function GameRoom(props) {
   let location = useLocation();
   let designer = location.state.designer;
 
+  console.log(designer);
   useEffect(async () => {
     let isPlaying = await amIPlaying()
       .then((data) => data.isPlaying)
@@ -154,7 +155,7 @@ function GameRoom(props) {
         />
       )}
       <SockJsClient
-        url={`http://${designer}:31600/ws`}
+        url={`http://localhost:31600/ws`}
         topics={[`/topic/${gameId}`]}
         onConnect={onConnect}
         onDisconnect={onDisconnect}

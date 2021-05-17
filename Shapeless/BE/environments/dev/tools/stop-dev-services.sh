@@ -6,6 +6,3 @@ script_dir=${script_dir//\/\./}
 cd "$script_dir"
 
 docker stop "$(docker ps --format "{{.ID}}" --filter "name=shapeless_postgres")"
-docker stop "$(docker ps --format "{{.ID}}" --filter "name=shapeless_prometheus")"
-docker stop "$(docker ps --format "{{.ID}}" --filter "name=shapeless_kafka")"
-docker stop "$(docker ps --format "{{.ID}}" --filter "name=shapeless_zookeeper")"

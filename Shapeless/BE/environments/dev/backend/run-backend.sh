@@ -15,6 +15,7 @@ nix-build --out-link "$GENERATED_BE" --argstr beRoot "$BE_ROOT" nix/backend.nix
 
 echo "Building backend images!"
 docker build -f "dockerfiles/Dispatcher" -t "shapeless/dispatcher" "$GENERATED_BE/dispatcher"
+docker build -f "dockerfiles/Designer" -t "shapeless/designer" "$GENERATED_BE/designer"
 
 
 mkdir -p ~/.shapeless_runtime/zookeeper/data

@@ -1,9 +1,0 @@
-global:
-  evaluation_interval: "30s"
-  scrape_interval: "15s"
-scrape_configs:
-  - job_name: hive
-    metrics_path: /api/metrics
-    static_configs:
-      - targets:
-          - dispatcher:31500

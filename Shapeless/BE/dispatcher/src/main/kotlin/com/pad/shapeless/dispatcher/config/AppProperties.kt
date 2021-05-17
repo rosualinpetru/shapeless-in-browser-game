@@ -6,12 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class AppProperties {
     val auth = Auth
     val oauth2 = OAuth2
-    val dispatcher = Dispatcher
-
-    object Dispatcher {
-        var accessKey : String = ""
-        var secretAccessKey : String = ""
-    }
 
     object Auth {
         var tokenSecret: String = ""
