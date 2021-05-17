@@ -14,6 +14,7 @@ export const messageType = {
   updateLobby: "UPDATE_LOBBY",
   gameError: "GAME_ERROR",
   start: "START",
+  updateGame: "UPDATE_GAME",
 };
 
 export const ShapeColors = {

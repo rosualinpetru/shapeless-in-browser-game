@@ -1,6 +1,6 @@
 import "./Profile.css";
 import { useContext, useState } from "react";
-import { updateImage } from "../../api/APIUtils";
+import { updateImage, getCurrentUser } from "../../api/APIUtils";
 import AuthenticationContext from "../../context/authentication";
 import { toast } from "react-toastify";
 
@@ -12,18 +12,25 @@ function Profile(props) {
     setImageUrl(event.target.value);
   }
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
 
     const updateImageRequest = {
       imageUrl: imageUrl,
     };
 
-    updateImage(updateImageRequest).then((response) =>
+    await updateImage(updateImageRequest).then((response) =>
       toast.success(response.message)
     );
 
     event.target.reset();
+
+    getCurrentUser().then((response) => {
+      authContext.setUserHandler(response);
+      setImageUrl(response.imageUrl);
+    });
+
+    toast("Profile picture updated!");
   }
 
   return (

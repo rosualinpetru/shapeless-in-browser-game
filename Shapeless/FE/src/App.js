@@ -89,7 +89,6 @@ function App() {
         newestOnTop
         closeOnClick
         rtl={false}
-        pauseOnFocusLoss
         draggable
         pauseOnHover={false}
       />

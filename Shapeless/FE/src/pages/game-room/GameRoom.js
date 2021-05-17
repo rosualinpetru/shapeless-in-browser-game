@@ -48,6 +48,7 @@ function GameRoom(props) {
       toast.error("You can only play one game at a time!");
     }
     setIsLoading(false);
+    return () => {};
   }, []);
 
   function onConnect() {
@@ -82,6 +83,23 @@ function GameRoom(props) {
           setIsStarted(true);
         });
         break;
+      case messageType.updateGame:
+        getPlayersInActualGame(gameId).then((response) => {
+          if (
+            response.find((player) => player.id === currentUser.id) ===
+            undefined
+          ) {
+            toast("DEFEAT!");
+            history.push("/");
+          } else {
+            if (response.length === 1) {
+              toast("VICTORY!");
+              history.push("/");
+            }
+            setPlayersList(response);
+          }
+        });
+        break;
     }
   }
 
@@ -96,6 +114,10 @@ function GameRoom(props) {
     );
   }
 
+  function guess(data) {
+    clientRef.sendMessage(`/app/game/${gameId}/guess`, JSON.stringify(data));
+  }
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
@@ -103,7 +125,11 @@ function GameRoom(props) {
   return (
     <div>
       {isStarted ? (
-        <Game playersList={playersList} currentUser={currentUser} />
+        <Game
+          playersList={playersList}
+          currentUser={currentUser}
+          guess={guess}
+        />
       ) : (
         <Lobby
           gameData={gameData}

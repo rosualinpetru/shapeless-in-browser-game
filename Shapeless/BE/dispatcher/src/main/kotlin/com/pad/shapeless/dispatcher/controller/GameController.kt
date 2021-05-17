@@ -18,7 +18,6 @@ import java.util.*
 @RequestMapping("/api")
 class GameController @Autowired constructor(
     private val gameService: GameService,
-    private val playerService: PlayerService,
 ) {
 
     @PostMapping("/games")
@@ -61,21 +60,4 @@ class GameController @Autowired constructor(
     ): ResponseEntity<*> =
         ResponseEntity.status(HttpStatus.OK)
             .body<Any>(IsPlayingDto(userPrincipal.getId(), gameService.isPlaying(userPrincipal.getId())))
-
-    fun getGuessedPlayer(players: List<InGamePlayerDto>, guessedId: UUID): InGamePlayerDto
-    {
-        for(p in players)
-            if(p.id === guessedId)
-                return p;
-    }
-
-
-    @GetMapping("/games/{id}/guess")
-    @PreAuthorize("hasRole('USER')")
-    fun handleGuess(guess: GuessDto): ResponseEntity<*> =
-        ResponseEntity.status(HttpStatus.OK).body<Any>(getGuessedPlayer(playerService.getActivePlayers(guess.gameId),guess.guessedId))
-
-
-
-
 }

@@ -3,13 +3,18 @@ package com.pad.shapeless.dispatcher.service
 import com.pad.shapeless.dispatcher.dto.InGamePlayerDto
 import com.pad.shapeless.dispatcher.dto.PlayerDto
 import com.pad.shapeless.dispatcher.model.*
+import com.pad.shapeless.dispatcher.repository.GameRepository
 import com.pad.shapeless.dispatcher.repository.PlayerRepository
+import com.pad.shapeless.dispatcher.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PlayerService @Autowired constructor(private val playerRepository: PlayerRepository) {
+class PlayerService @Autowired constructor(
+    private val playerRepository: PlayerRepository,
+    private val gameRepository: GameRepository
+) {
 
     private val combinations =
         Shape.values().flatMap { shape -> Color.values().map { color -> SCCombination(shape, color) } }.toSet()
@@ -31,41 +36,44 @@ class PlayerService @Autowired constructor(private val playerRepository: PlayerR
 
     fun joinUser(user: User, game: Game) {
         val generatedNewCombination = generateUnusedCombination(game.id)
-        playerRepository.save(
-            Player(
-                user = user,
-                game = game,
-                shape = generatedNewCombination.shape,
-                color = generatedNewCombination.color
+        (playerRepository.findAllByGame_Id(game.id).size + 1).let {
+            playerRepository.save(
+                Player(
+                    user = user,
+                    game = game,
+                    shape = generatedNewCombination.shape,
+                    color = generatedNewCombination.color,
+                    orderNr = it,
+                    lives = when (game.difficulty) {
+                        GameDifficulty.EASY -> 4 + 1 / it
+                        GameDifficulty.MEDIUM -> 3 + 1 / it
+                        GameDifficulty.HARD -> 2 + 1 / it
+                    }
+                )
             )
-        )
+        }
 
     }
 
     fun getInActualGamePlayers(gameId: UUID, myId: UUID): List<InGamePlayerDto> {
-        val allInGame = playerRepository.findAllByGame_Id(gameId)
+        val allInGame = playerRepository.findAllByGame_Id(gameId).sortedBy { it.orderNr }
         val nextSelect = allInGame.minByOrNull { it.countGuess }
         return allInGame.map {
             InGamePlayerDto(
                 id = it.user.id,
                 name = it.user.name,
-                color = if (it.isColorKnown || myId == it.user.id) it.color else null,
-                shape = if (it.isColorKnown || myId == it.user.id) it.shape else null,
-                isChoosing = nextSelect?.user?.id == it.user.id
-            )
-        }
-    }
-
-    fun getActivePlayers(gameId: UUID): List<InGamePlayerDto> {
-        val allInGame = playerRepository.findAllByGame_Id(gameId)
-        val nextSelect = allInGame.minByOrNull { it.countGuess }
-        return allInGame.map {
-            InGamePlayerDto(
-                id = it.user.id,
-                name = it.user.name,
-                color = it.color,
-                shape = it.shape,
-                isChoosing = nextSelect?.user?.id == it.user.id
+                color =
+                if (myId == it.user.id)
+                    if (!it.isColorKnown) it.color else null
+                else
+                    if (it.isColorKnown) it.color else null,
+                shape =
+                if (myId == it.user.id)
+                    if (!it.isShapeKnown) it.shape else null
+                else
+                    if (it.isShapeKnown) it.shape else null,
+                isChoosing = nextSelect?.user?.id == it.user.id,
+                lives = if (myId == it.user.id) it.lives else null
             )
         }
     }

@@ -22,18 +22,17 @@ class UserService @Autowired constructor(
     private val passwordEncoder: PasswordEncoder,
     private val saltGenerator: SaltGenerator
 ) {
-    
+
     fun getUserById(id: UUID): User? = userRepository.findByIdOrNull(id)
 
-    
+
     fun getUserByEmail(email: String): User? = userRepository.findByEmail(email)
 
-    
+
     fun updateImageUrl(user: User, imageUpdateRequest: ImageUpdateRequest): User? =
         userRepository.save(user.copy(imageUrl = imageUpdateRequest.imageUrl))
 
 
-    
     fun registerUser(signUpRequest: SignUpRequest): User =
         if (userRepository.existsByEmail(signUpRequest.email))
             throw BadRequestException("Email address already in use.")
@@ -50,7 +49,7 @@ class UserService @Autowired constructor(
                 }
             )
 
-    
+
     fun registerOAuth2User(oAuth2UserInfo: OAuth2UserInfo): User =
         if (userRepository.existsByEmail(oAuth2UserInfo.email!!))
             throw BadRequestException("Email address already in use.")
@@ -64,22 +63,14 @@ class UserService @Autowired constructor(
                     providerId = oAuth2UserInfo.id
                 )
             )
-    
-    fun updateOAuth2User(existingUser: User, oAuth2UserInfo: OAuth2UserInfo): User =
-        userRepository.save(
-            User(
-                id = existingUser.id,
-                name = oAuth2UserInfo.name!!,
-                imageUrl = oAuth2UserInfo.imageUrl,
-                authProvider = existingUser.authProvider,
-                email = existingUser.email
-            )
-        )
 
-    
+    fun updateOAuth2User(existingUser: User, oAuth2UserInfo: OAuth2UserInfo): User =
+        userRepository.save(existingUser.copy(name = oAuth2UserInfo.name!!, imageUrl = oAuth2UserInfo.imageUrl))
+
+
     fun getAllLeaderboardEntries(): List<LeaderboardEntry> =
         userRepository.findAll()
-            .sortedBy { it.score }
+            .sortedByDescending { it.score }
             .mapIndexed { index, user ->
                 LeaderboardEntry(
                     position = index + 1,

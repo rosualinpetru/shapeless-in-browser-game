@@ -17,6 +17,8 @@ data class Player(
     val shape: Shape,
     @Enumerated(EnumType.STRING)
     val color: Color,
+    val orderNr: Int,
+    val lives: Int,
     val isShapeKnown: Boolean=false,
     val isColorKnown: Boolean=false,
     val countGuess: Int = 0,

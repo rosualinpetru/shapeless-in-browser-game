@@ -9,5 +9,6 @@ data class InGamePlayerDto(
     val name: String,
     val shape: Shape?,
     val color: Color?,
+    val lives: Int?,
     val isChoosing: Boolean
 )
