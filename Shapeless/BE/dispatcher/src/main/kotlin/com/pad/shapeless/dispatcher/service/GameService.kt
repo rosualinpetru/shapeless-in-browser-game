@@ -30,6 +30,7 @@ class GameService @Autowired constructor(
 ) {
 
     fun createGame(id: UUID, gameCreationRequest: GameCreationRequest): GameCreationResponse {
+        gameRepository.deleteAll(gameRepository.findAll().filter { playerRepository.findAllByGame_Id(it.id).isEmpty() })
         val designer = designerService.assignDesigner()
         val user = userRepository.findByIdOrNull(id) ?: throw ResourceNotFoundException(
             "User",
@@ -132,11 +133,12 @@ class GameService @Autowired constructor(
                 if (allInGame.size == 1) {
                     val player = allInGame.first()
                     val user = player.user
+                    gameRepository.save(game.copy(owner = allInGame.first().user))
                     userRepository.save(user.copy(score = player.points + user.score))
                     playerRepository.delete(player)
                     return@let
                 }
-
+                gameRepository.save(game.copy(owner = allInGame.filterNot { it.user.id == left.player }.first().user))
                 playerRepository.findByUser_Id(left.player)?.let { playerRepository.delete(it) }
 
             }
