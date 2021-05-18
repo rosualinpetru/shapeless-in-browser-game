@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
-import { messageType } from "../../constants";
+import { messageType, DESIGNER_HOST } from "../../constants";
 import AuthenticationContext from "../../context/authentication";
 import SockJsClient from "react-stomp";
 import {
@@ -31,7 +31,6 @@ function GameRoom(props) {
   let location = useLocation();
   let designer = location.state.designer;
 
-  console.log(designer);
   useEffect(async () => {
     let isPlaying = await amIPlaying()
       .then((data) => data.isPlaying)
@@ -155,7 +154,7 @@ function GameRoom(props) {
         />
       )}
       <SockJsClient
-        url={`http://localhost:31600/ws`}
+        url={DESIGNER_HOST}
         topics={[`/topic/${gameId}`]}
         onConnect={onConnect}
         onDisconnect={onDisconnect}

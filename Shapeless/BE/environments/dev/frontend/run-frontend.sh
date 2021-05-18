@@ -17,16 +17,15 @@ INTERNAL_PORT=80
 mkdir -p "$GENERATED"
 
 echo "Building frontend derivation!"
-rm -rf "$GENERATED_FE"
-nix-store --delete /nix/store/*-shapeless-frontend* 2> /dev/null
 nix-build --out-link "$GENERATED_FE" \
   --argstr feRoot "$FE_ROOT" \
+  --argstr version "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)" \
   --argstr nginxConf "$script_dir/configs/nginx.conf" \
+  --option sandbox-paths "$HOME=$HOME" \
   nix/frontend.nix
 
 echo "Building frontend image!"
-LOCAL_REACT_APP_API_URL="http://localhost:31500/"
-docker build -f dockerfiles/Frontend -t "shapeless/frontend" --build-arg REACT_APP_API_URL="$LOCAL_REACT_APP_API_URL" "$GENERATED_FE"
+docker build -f dockerfiles/Frontend -t "shapeless/frontend" --build-arg REACT_APP_REMOTE="shapeless.go.ro" "$GENERATED_FE"
 
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
   if [ ! "$(docker ps -aq -f name=$CONTAINER_NAME -f status=exited)" ]; then

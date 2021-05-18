@@ -9,16 +9,11 @@ BE_ROOT="$script_dir/../../.."
 GENERATED_BE="$BE_ROOT/.generated/backend"
 
 echo "Building backend derivation!"
-rm -rf "$GENERATED_BE"
-nix-store --delete /nix/store/*-shapeless-backend* 2> /dev/null
-nix-build --out-link "$GENERATED_BE" --argstr beRoot "$BE_ROOT" nix/backend.nix
+echo "$GENERATED_BE"
+nix-build --out-link "$GENERATED_BE" --argstr version "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)" --argstr beRoot "$BE_ROOT" --option sandbox false nix/backend.nix
 
 echo "Building backend images!"
 docker build -f "dockerfiles/Dispatcher" -t "shapeless/dispatcher" "$GENERATED_BE/dispatcher"
 docker build -f "dockerfiles/Designer" -t "shapeless/designer" "$GENERATED_BE/designer"
 
-
-mkdir -p ~/.shapeless_runtime/zookeeper/data
-mkdir -p ~/.shapeless_runtime/zookeeper/datalog
-mkdir -p ~/.shapeless_runtime/kafka/data
 docker-compose -p shapeless -f configs/docker-compose.yaml up --remove-orphans

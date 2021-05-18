@@ -1,7 +1,8 @@
-{ nixpkgs ? import <nixpkgs> { },  beRoot }:
+{ nixpkgs ? import <nixpkgs> { },  beRoot, version }:
 with nixpkgs;
 stdenv.mkDerivation rec {
-  name = "shapeless-backend";
+  pname = "shapeless-backend";
+  inherit version;
   src = beRoot;
   buildInputs = [ adoptopenjdk-jre-bin gradle ];
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];

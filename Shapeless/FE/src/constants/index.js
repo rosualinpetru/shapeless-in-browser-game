@@ -1,7 +1,20 @@
-export const API_BASE_URL = "http://localhost:31500";
+export const API_BASE_URL = `http://${
+  process.env.REACT_APP_REMOTE === undefined
+    ? "localhost"
+    : `${process.env.REACT_APP_REMOTE}`
+}:31500`;
+export const DESIGNER_HOST = `http://${
+  process.env.REACT_APP_REMOTE === undefined
+    ? "localhost"
+    : `${process.env.REACT_APP_REMOTE}`
+}:31600/ws`;
 export const ACCESS_TOKEN = "accessToken";
 
-export const OAUTH2_REDIRECT_URI = "http://localhost:31700/oauth2/redirect";
+export const OAUTH2_REDIRECT_URI = `http://${
+  process.env.REACT_APP_REMOTE === undefined
+    ? "localhost:31700"
+    : `${process.env.REACT_APP_REMOTE}`
+}/oauth2/redirect`;
 
 export const GOOGLE_AUTH_URL =
   API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI;
