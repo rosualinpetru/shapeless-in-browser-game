@@ -27,9 +27,18 @@
 }
 
 .guess-title {
-  font-size: 1.5em;
+  font-size: 1.65em;
   font-weight: 500;
   margin-top: 0;
   margin-bottom: 30px;
   color: rgba(0, 0, 0, 0.65);
+  font-family: impact;
+
+}
+
+.announcements
+{
+  vertical-align: middle;
+  font-size: 2.5em;
+  font-family: impact;
 }

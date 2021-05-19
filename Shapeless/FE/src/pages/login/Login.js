@@ -36,7 +36,6 @@ function Login(props) {
   return (
     <div className="login-container">
       <div className="login-content">
-        <h1 className="login-title">Login with</h1>
         <SocialLogin />
         <div className="or-separator">
           <span className="or-text">OR</span>

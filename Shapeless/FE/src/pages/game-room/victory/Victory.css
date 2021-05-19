@@ -15,6 +15,13 @@
   padding: 35px;
 }
 
+.victory-msg
+{
+  vertical-align: middle;
+  font-size: 3.5em;
+  font-family: impact
+}
+
 .trophy {
   width: 200px;
 }

@@ -16,7 +16,9 @@
 .btn-leave {
   float: left;
   margin-top: -10px;
-  border-radius: 100% !important;
+  font-size:25px !important;
+  border:1.5px solid red !important;
+  border-radius: 15px !important;
 }
 
 .btn-start {
@@ -46,6 +48,7 @@
 .counter-header {
   float: right;
   border-radius: 100% !important;
+  font-family: impact;
 }
 
 .scrollbar {
@@ -202,4 +205,9 @@
   line-height: 40px;
   color: #fff;
   font-size: 1.5em;
+}
+
+.room-name{
+  font-size: 1.35em;
+  font-family: impact
 }

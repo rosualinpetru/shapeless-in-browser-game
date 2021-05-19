@@ -253,3 +253,20 @@ fieldset[disabled] .form-control {
   padding: 10px;
   color: rgba(0, 0, 0, 0.45);
 }
+
+.background {
+  background-image: url('images/shapeless_bg.png');
+  position: absolute;
+  background-position: bottom;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.blur {
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(9px);
+  height: 100%;
+  width: 100%;
+}

@@ -27,7 +27,7 @@ function Lobby(props) {
             <div className="counter-header">
               {playersList.length}/{gameData.maxPlayers}
             </div>
-            <h2>{gameData.name}</h2> - <i>{gameData.difficulty}</i>
+            <h2 class="room-name">{gameData.name}</h2> - <i>{gameData.difficulty}</i>
           </div>
           <div className="playerlist-box scrollbar">
             <table className="fl-table">

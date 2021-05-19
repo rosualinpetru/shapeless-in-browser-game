@@ -13,9 +13,9 @@ function Victory() {
     <div className="victory-container">
       <div className="victory-content">
         <img src={trophy} className="trophy" />
-        <h2>Victory!</h2>
+        <h2 className="victory-msg">Victory!</h2>
         <button className="btn btn-success btn-sm btn-start" onClick={goHome}>
-          To Profile!
+          Back To Profile
         </button>
       </div>
     </div>

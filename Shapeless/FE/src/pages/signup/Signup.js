@@ -26,7 +26,6 @@ function Signup(props) {
   return (
     <div className="signup-container">
       <div className="signup-content">
-        <h1 className="signup-title">Signup with</h1>
         <SocialSignup />
         <div className="or-separator">
           <span className="or-text">OR</span>

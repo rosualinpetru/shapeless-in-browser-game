@@ -66,11 +66,11 @@ function Games() {
             >
               ⟳
             </button>
-            <h2>Games</h2>
+            <h2 className="games-title">Games</h2>
           </div>
           <div className="games-box scrollbar">
             <table className="fl-table">
-              <thead>
+              <thead >
                 <tr>
                   <th>Difficulty</th>
                   <th>Room name</th>

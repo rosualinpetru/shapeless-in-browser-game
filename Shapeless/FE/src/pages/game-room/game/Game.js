@@ -83,10 +83,10 @@ function Game(props) {
               </div>
             </div>
           ) : (
-            <h1>Click on a player card!</h1>
+            <h1 className="announcements">Click on a player card!</h1>
           )
         ) : (
-          <h1>Wait for your turn!</h1>
+          <h1 className="announcements">Wait for your turn!</h1>
         )}
       </div>
     </div>
