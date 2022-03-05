@@ -218,7 +218,7 @@ lint/tmp/
 # lint/reports/
 
 *.hprof
-.DS_Store
+*.DS_Store*
 .generated
 .secrets
 
